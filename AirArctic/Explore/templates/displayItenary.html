@@ -1,0 +1,168 @@
+{% load static %}
+{% csrf_token %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+
+    <style>
+    table, th, td {
+    padding: 15px;
+    border:2px solid black;
+    border-collapse: collapse;
+      }
+    </style>
+    
+
+</head>
+<body onload="displayItenary()">
+
+<p id="url">{{ request.get_full_path }}</p>
+
+<script>
+
+var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+
+var jsUrl = new URL(window.location.href);
+var flightId = jsUrl.searchParams.get("flightId");
+
+var departingFlightId = jsUrl.searchParams.get("departingFlight");
+var returningFlightId = jsUrl.searchParams.get("returningFlight");
+
+console.log("url " + jsUrl)
+console.log("flight id is:" + flightId)
+console.log(url)
+
+async function displayItenary() { 
+
+
+var tripD = "ONEWAY"
+
+    
+ let trip = await makeTrip(departingFlightId, returningFlightId, tripD)
+
+
+    console.log("coming from trip func")
+    console.log(trip)
+
+    tripStr = JSON.stringify(trip)
+
+    d_f = trip['departingFlight']['flightNumber']
+    d_depart_airport = trip['departingFlight']['departureAirport']['iataCode']
+    d_dest_Airport = trip['departingFlight']['destinationAirport']['iataCode']
+    d_depart_date = trip['departingFlight']['departureDate']
+    d_arrival_date = trip['departingFlight']['arrivalDate']
+
+    r_f = trip['returningFlight']['flightNumber']
+    r_depart_airport = trip['returningFlight']['departureAirport']['iataCode']
+    r_dest_Airport = trip['returningFlight']['destinationAirport']['iataCode']
+    r_depart_date = trip['returningFlight']['departureDate']
+    r_arrival_date = trip['returningFlight']['arrivalDate']
+
+
+
+
+
+    document.getElementById('output').innerHTML = tripStr;
+   
+
+    document.getElementById('d1').innerHTML = d_f;
+    document.getElementById('d2').innerHTML = d_depart_airport;
+    document.getElementById('d3').innerHTML = d_dest_Airport;
+    document.getElementById('d4').innerHTML = d_depart_date;
+    document.getElementById('d5').innerHTML = d_arrival_date;
+
+
+    document.getElementById('r1').innerHTML = r_f;
+    document.getElementById('r2').innerHTML = r_depart_airport;
+    document.getElementById('r3').innerHTML = r_dest_Airport;
+    document.getElementById('r4').innerHTML = r_depart_date;
+    document.getElementById('r5').innerHTML = r_arrival_date;
+
+    
+}
+
+
+
+async function makeTrip(selectedDepartingFlight, selectedReturningFlight, trip) { 
+
+        
+            
+const rawResponse = await fetch(`http://127.0.0.1:8000/api/trips/?trip=ROUNDTRIP`, {
+  method: 'POST',
+  body: JSON.stringify({
+    "departingFlight_id": selectedDepartingFlight,
+    "returningFlight_id": selectedReturningFlight,
+
+  }),
+  headers: {
+    'Content-Type': 'application/json; charset=UTF-8',
+    'X-CSRFToken' : 'csrftoken',
+ },
+});
+const content = await rawResponse.json();
+
+console.log(content);
+return content;
+
+
+}
+
+
+
+</script>
+
+
+<h2> Your Itenary</h2>
+
+<p id="output">
+</p>
+
+<table>
+
+  <h3>Departing Flight</h3>
+
+   
+  <tr>
+    <th>Flight No</th>
+    <th>Departure Airport</th>
+    <th>Destination Airport</th>
+    <th>Departure Date</th>
+    <th>Arrival Date</th>
+  </tr>
+  <tr>
+    <td id="d1"></td>
+    <td id="d2"></td>
+    <td id="d3"></td>
+    <td id="d4"></td>
+    <td id="d5"></td>
+  </tr>
+
+</table>
+
+  <h3>Returning Flight</h3>
+
+<table>
+  <tr>
+    <th>Flight No</th>
+    <th>Departure Airport</th>
+    <th>Destination Airport</th>
+    <th>Departure Date</th>
+    <th>Arrival Date</th>
+  </tr>
+  <tr>
+    <td id="r1"></td>
+    <td id="r2"></td>
+    <td id="r3"></td>
+    <td id="r4"></td>
+    <td id="r5"></td>
+  </tr>
+
+</table>
+
+</body>
+</html>

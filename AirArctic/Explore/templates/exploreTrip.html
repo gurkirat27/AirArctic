@@ -1,0 +1,102 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+
+    <style>
+    table,th, td {
+    padding: 15px;
+      }
+    </style>
+    
+
+</head>
+<body>
+
+<h2>Explore</h2>
+
+<form  method = "post" action="{% url 'submitexploreform' %}">
+    {% csrf_token %}
+  <label for="trip">Trip:</label><br>
+  <select name="trip" id="trip" name="{{trip}}" onchange="handleChange(event)">
+    <option id="oneway" value="ONEWAY">ONEWAY</option>
+    <option id="roundtrip" value="ROUNDTRIP">ROUNDTRIP</option>
+  </select><br>
+  <label for="from">Travelling from:</label><br>
+  <input type="text" id="from" name="from" value="{{from}}" required><br>
+  <label for="to">Travelling To:</label><br>
+  <input type="text" id="to" name="to" value="{{to}}" required><br><br>
+
+
+  <div class="startdate" name="startdate" id="startdate">
+    <label for="startdate">Start Date:</label><br>
+    <input type="date" id="startdate" name="startdate" value="{{startdate}}" required><br>
+  </div>
+
+  <div class="enddate" name="enddate" id="enddate">
+   <label for="enddate">Return date:</label><br>
+   <input type="date" id="enddate" name="enddate" value="{{enddate}}" ><br><br>
+  </div>
+
+  
+  <button type="submit" value="Search Flights" > Search Flights</button>
+
+</form> 
+
+
+<script>
+
+$('div').hide()
+
+var triP =  document.getElementById("trip");
+var tripD = trip.options[trip.selectedIndex].value;
+
+
+function handleChange(e) {
+  let innerText = e.target[e.target.options.selectedIndex].innerText;
+  tripD = e.target.value;
+
+  
+
+ console.log(tripD)
+
+ $('div').hide()
+
+ if (tripD == "ONEWAY") {
+
+$('#startdate').show();
+}
+
+else if (tripD == "ROUNDTRIP") {
+
+$('#enddate').show();
+$('#startdate').show();
+}
+
+}
+
+
+ console.log(tripD)
+
+//tripD = "roundtrip"
+
+
+if (tripD == "ONEWAY") {
+
+  $('#startdate').show();
+}
+
+else if (tripD == "ROUNDTRIP") {
+
+ $('#enddate').show();
+ $('#startdate').show();
+}
+</script>
+
+</body>
+</html>

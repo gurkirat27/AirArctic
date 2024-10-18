@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+
+    <style>
+    table,th, td {
+    padding: 15px;
+      }
+    </style>
+    
+
+</head>
+<body onload="displaySelectedReturningFlight()">
+
+<p id="url">{{ request.get_full_path }}</p>
+
+<script>
+
+var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+
+var jsUrl = new URL(window.location.href);
+var flightId = jsUrl.searchParams.get("flightId");
+
+console.log("url " + jsUrl)
+console.log("flight id is:" + flightId)
+console.log(url)
+
+async function displaySelectedReturningFlight() { 
+
+    
+ let flightObj = await getFlightById(flightId)
+
+
+    console.log("coming from selected returning func")
+    console.log(flightObj)
+
+    flightObjStr = JSON.stringify(flightObj)
+
+    document.getElementById('output').innerHTML = flightObjStr;
+}
+
+
+async function getFlightById(flightId) {
+
+
+let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
+
+flight = await flight.json()
+console.warn(flight)
+
+var from = flight.departureAirport.iataCode
+var to = flight.destinationAirport.iataCode
+
+
+
+console.log(from)
+
+return flight
+
+console.log("GetFlight by If func")
+
+}
+
+
+</script>
+
+
+<h2> Selected Returning Flight</h2>
+
+<p id="output">
+
+</p>
+
+<input type="button" value="View Trip" onClick="displayReturningFlights()" >
+
+<form  method = "post" action="{% url 'submititenaryform' %}">
+  {% csrf_token %}
+
+
+<input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
+<input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
+
+
+<button type="submit" value="View Trip" > View Trip</button>
+
+</form> 
+
+
+</body>
+</html>

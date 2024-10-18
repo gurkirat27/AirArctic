@@ -1,0 +1,154 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+    
+    
+
+    <style>
+    table,th, td {
+    padding: 15px;
+      }
+    </style>
+    
+
+</head>
+<body onload="displayDepartureFlights()">
+
+ 
+ <p id="url">{{ request.get_full_path }}</p>
+
+<script>
+ 
+var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+
+ var jsUrl = new URL(window.location.href);
+
+
+ var from = jsUrl.searchParams.get("from");
+ var to = jsUrl.searchParams.get("to")
+ var trip = jsUrl.searchParams.get("trip");
+ var departure = jsUrl.searchParams.get("departure");
+
+
+
+
+console.log(from);
+console.log(to)
+console.log(departure)
+
+
+async function displayDepartureFlights() { 
+
+    
+    let flightObj = await getFlights(from, to, departure)
+    document.getElementById('flightData').innerHTML=flightObj.map((flight) => 
+                
+        `<tr>
+
+            <td>${flight.id}</td>
+            <td>${flight.flightNumber}</td>
+            <td>${flight.departureAirport.iataCode}</td>
+            <td>${flight.destinationAirport.iataCode}</td>
+            <td>${flight.departureDate}</td>
+            <td>${flight.departureTime}</td>
+            <td>${flight.arrivalDate}</td>
+            <td>${flight.arrivalTime}</td>
+            
+              <td><input type="button"  value="Select Flight" onClick="saveFlightId(${flight.id})"> </td>
+            
+        </tr>`
+
+        
+
+    ).join("");
+
+        console.log("coming from departing func")
+        console.log(flightObj)
+}
+
+
+
+function onClickSubmission(){
+      return window.location.href = "{% url 'submitdepartureform' %}"
+      
+    
+    }
+
+function saveFlightId(selectedFlightId){
+     
+    var flight_id = selectedFlightId
+
+
+    window.location.href = "/api/selectedDepartureFlight/?flightId="+flight_id;
+    
+   // Submitdepartureform view not used
+   //For now only using client side processing, better to use server side url redirect
+    /*
+    $.ajax({
+        type: "GET",
+        url: "{% url 'submitdepartureform' %}", 
+        data: {
+            "flight_id" : flight_id,
+        },
+        success: function (data) {
+
+            
+            
+            //window.location.href = "{% url 'submitdepartureform' %}"
+            window.location.href = "/api/selectedDepartureFlight/?flightId="+flight_id;
+
+           
+
+            
+        },
+        failure: function () {
+            alert("failure");
+        }
+    });
+    
+*/
+
+
+}
+
+</script>
+
+
+    <h2> Best Departure Flights</h2>
+
+
+        <table style="border: 2px solid black;">
+               
+            
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Flight Number</th>
+                    <th>Departure Airport</th>
+                    <th>Destination Airport</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
+                    <th>Select Flight</th>
+                </tr>
+            </thead>
+            <tbody id="flightData" >
+                <tr style="border: 1px solid black;">
+                    
+                </tr>
+        
+
+    </tbody>
+</table>
+
+
+</body>
+</html>
