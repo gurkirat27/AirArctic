@@ -17,10 +17,6 @@ def displayReturningFlights(request):
 
 def displaySelectedDepartureFlight(request):
 
-   departureFlightId = request.GET.get('id')
-
-   request.session['dFlightId'] = departureFlightId
-
    return render(request, 'displaySelectedDepartingFlight.html')
 
 def displaySelectedReturningFlight(request):
@@ -31,8 +27,10 @@ def displayItenary(request):
 
    return render(request, 'displayItenary.html')
 
+
 def submitexploreform(request):
   try:
+    
     if request.method=="POST":
 
       tripD = str(request.POST.get('trip'))
@@ -51,19 +49,12 @@ def submitexploreform(request):
             'departD':departD,
             'returnD': returnD
 
-
       }
 
       
       FINALDATA = data
-      
-
-
-
       print(data)
       
-
-
       if returnD == "":
 
        url = "/api/departureFlights/?trip={}&from={}&to={}&departure={}".format(tripD,fromD,toD,departD)
@@ -76,44 +67,34 @@ def submitexploreform(request):
        return redirect(url)
       
     return tripD
-      
-    #return redirect(url)
-      
-      
-    
-      
-    #return render(request, "displayReturningFlights.html", data)
-
+  
   except:
    pass
 
   
-  
+# check if its been used or not
 def submitdepartureform(request):
-      
-
-      
       
 
       if request.method=="GET":
        
-       dD = submitexploreform(request)
-       print("DB IS"+ dD)
 
        selectedFlightId = request.GET.get("flight_id")
        print("Slected flight id id = {}".format(selectedFlightId))
 
-       flightId = 1
-
        url = "/api/selectedDepartureFlight/?flightId={}".format(selectedFlightId)
 
-       return redirect(url)
+       request.session['dFlightId'] = selectedFlightId
 
+
+       return redirect(url)
+ 
 
 
 
       
 def submitreturnform(request):
+  
   try:
     if request.method=="POST":
 
@@ -130,25 +111,23 @@ def submitreturnform(request):
 
       }
 
-      print("FROM D VALUE IS" + fromD)
-      print(toD)
-
-      #url = "/api/returningFlights/?trip={}&from={}&to={}".format("ROUNDTRIP",fromD,toD)
       url = "/api/returningFlights/?trip={}&from={}&to={}&return={}".format("ROUNDTRIP",fromD,toD,returnDate)
 
       return redirect(url)
   except:
    pass
 
+# Check if its beenm used or not
 def submitreturnselectedform(request):
       
       
       selectedReturnFlightId = request.GET.get("flight_id")
       print(selectedReturnFlightId)
 
-      flightId = 1
 
       url = "/api/selectedReturningFlight/?flightId={}".format(selectedReturnFlightId)
+
+      request.session['rFlightId'] = selectedReturnFlightId
 
       return redirect(url)
 
@@ -157,8 +136,8 @@ def submititenaryform(request):
     if request.method=="POST":
 
       #departingFlight = request.POST.get('departingFlightId')
-      returningFlight = request.POST.get('returningFlightId')
-
+      #returningFlight = request.POST.get('returningFlightId')
+      returningFlight = request.session['rFlightId']
       departingFlight = request.session['dFlightId']
       
 

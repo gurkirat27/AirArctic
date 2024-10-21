@@ -78,11 +78,11 @@ function saveFlightId(selectedFlightId){
      
      var flight_id = selectedFlightId
 
-     window.location.href = "/api/selectedReturningFlight/?flightId="+flight_id;
+    // window.location.href = "/api/selectedReturningFlight/?flightId="+flight_id;
      
    // Submitreturnform view not used
    //For now only using client side processing, better to use server side url redirect
-   /*
+   
      $.ajax({
          type: "GET",
          url: "{% url 'submitreturnselectedform' %}", 
@@ -102,7 +102,7 @@ function saveFlightId(selectedFlightId){
              alert("failure");
          }
      });
-     */
+     
      
  
  }
