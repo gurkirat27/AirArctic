@@ -28,14 +28,8 @@ async function makeTrip(selectedDepartingFlight, selectedReturningFlight) {
    
 async function getFlights(from, to, departure) {
       
-        let head= new Headers();
-        
 
-        headers.append('Content-Type', 'application/json');
-        headers.append('Accept', 'application/json');
-        headers.append('Origin','http://localhost:8000');
-
-        let flights =await fetch(`http://127.0.0.1:8000/api/flights/?departureAirport=${from}&destinationAirport=${to}&departureDate=${departure}`,{headers:head});
+        let flights =await fetch(`http://127.0.0.1:8000/api/flights/?departureAirport=${from}&destinationAirport=${to}&departureDate=${departure}`);
 
         flights = await flights.json()
         console.warn(flights)
@@ -73,11 +67,11 @@ function storesTripData(from, to){
 
 
 
-    async function getReturningFlights(from, to) {
+    async function getReturningFlights(from, to, returnDate) {
 
 
 
-        let flights =await  fetch(`http://127.0.0.1:8000/api/flights/?departureAirport=${to}&destinationAirport=${from}`);
+        let flights =await  fetch(`http://127.0.0.1:8000/api/flights/?departureAirport=${to}&destinationAirport=${from}&departureDate=${returnDate}`);
     
         flights = await flights.json()
         console.warn(flights)

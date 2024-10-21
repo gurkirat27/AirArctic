@@ -35,18 +35,20 @@ var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
  var from = jsUrl.searchParams.get("from");
  var to = jsUrl.searchParams.get("to")
  var trip = jsUrl.searchParams.get("trip");
+ var returnDate = jsUrl.searchParams.get("return");
 
 
 
 
 console.log(from);
 console.log(to)
+console.log(returnDate)
 
 
 async function displayReturningFlights() { 
 
     
-    let flightObj = await getReturningFlights(from, to)
+    let flightObj = await getReturningFlights(from, to, returnDate)
     document.getElementById('returningFlightData').innerHTML=flightObj.map((flight) => 
                 
         `<tr>

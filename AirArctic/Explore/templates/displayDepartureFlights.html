@@ -75,18 +75,18 @@ async function displayDepartureFlights() {
 
 
 
-function onClickSubmission(){
-      return window.location.href = "{% url 'submitdepartureform' %}"
+//function onClickSubmission(){
+ //     return window.location.href = "{% url 'submitdepartureform' %}"
       
     
-    }
+ //   }
 
 function saveFlightId(selectedFlightId){
      
-    var flight_id = selectedFlightId
+  var flight_id = selectedFlightId
 
 
-    window.location.href = "/api/selectedDepartureFlight/?flightId="+flight_id;
+  window.location.href = "/api/selectedDepartureFlight/?flightId="+flight_id;
     
    // Submitdepartureform view not used
    //For now only using client side processing, better to use server side url redirect

@@ -17,6 +17,10 @@ def displayReturningFlights(request):
 
 def displaySelectedDepartureFlight(request):
 
+   departureFlightId = request.GET.get('id')
+
+   request.session['dFlightId'] = departureFlightId
+
    return render(request, 'displaySelectedDepartingFlight.html')
 
 def displaySelectedReturningFlight(request):
@@ -36,6 +40,9 @@ def submitexploreform(request):
       toD = str(request.POST.get('to')) 
       departD = str(request.POST.get('startdate')) 
       returnD = str(request.POST.get('enddate')) 
+
+      request.session['returnDate']=returnD
+
       data = {
 
             'tripD':tripD,
@@ -112,19 +119,22 @@ def submitreturnform(request):
 
       fromD = request.POST.get('fromForm')
       toD = request.POST.get('toForm')
+      returnDate = request.session['returnDate']
       
 
       data = {
 
             'fromD':fromD,
-            'toD':toD
+            'toD':toD,
+            'returnDate':returnDate
 
       }
 
       print("FROM D VALUE IS" + fromD)
       print(toD)
 
-      url = "/api/returningFlights/?trip={}&from={}&to={}".format("ROUNDTRIP",fromD,toD)
+      #url = "/api/returningFlights/?trip={}&from={}&to={}".format("ROUNDTRIP",fromD,toD)
+      url = "/api/returningFlights/?trip={}&from={}&to={}&return={}".format("ROUNDTRIP",fromD,toD,returnDate)
 
       return redirect(url)
   except:
@@ -146,8 +156,10 @@ def submititenaryform(request):
   try:
     if request.method=="POST":
 
-      departingFlight = request.POST.get('departingFlightId')
+      #departingFlight = request.POST.get('departingFlightId')
       returningFlight = request.POST.get('returningFlightId')
+
+      departingFlight = request.session['dFlightId']
       
 
       data = {
