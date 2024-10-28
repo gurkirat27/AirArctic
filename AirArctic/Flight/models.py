@@ -17,7 +17,14 @@ class Aircraft(models.Model):
 
     def __str__(self)-> str:
         return self.aircraftModel
+''' 
+class Financial(models.Model):
 
+    airTransportationCharge = models.DecimalField(decimal_places=2)
+    airportImprovementFee = models.DecimalField(decimal_places=2)
+    airTravellerSecurityCharge = models.DecimalField(decimal_places=2)
+    goodsAndServiceCharge = models.DecimalField(decimal_places=2)
+'''
 class Flight(models.Model):
 
     flightNumber = models.CharField(max_length=100)
@@ -29,6 +36,7 @@ class Flight(models.Model):
     departureTime = models.TimeField()
     arrivalTime = models.TimeField()
     seatsAvailableToBook = models.IntegerField()
+    price = models.DecimalField(decimal_places=2, max_digits=5, default= 250)
 
     def __str__(self)-> str:
         return self.flightNumber

@@ -17,13 +17,10 @@ class FlightSerializer(serializers.HyperlinkedModelSerializer):
     departureAirport = AirportSerializer(read_only=True)
     destinationAirport = AirportSerializer(read_only=True)
     airCraft = AircraftSerializer(read_only=True)
-    
-    #designatedActivity = GymActivitySerializer(read_only=True)
-    #designatedActivity_id = GymActivitySerializer(write_only=True)
 
     class Meta:
         model = Flight
-        fields = ['id', 'flightNumber', 'airCraft', 'departureAirport', 'destinationAirport', 'departureDate', 'arrivalDate', 'departureTime', 'arrivalTime', 'seatsAvailableToBook' ]
+        fields = ['id', 'flightNumber', 'airCraft', 'departureAirport', 'destinationAirport', 'departureDate', 'arrivalDate', 'departureTime', 'arrivalTime', 'seatsAvailableToBook','price' ]
 
     def calculateFlightTime():
         flightTime =  Flight.departureTime - Flight.arrivalTime

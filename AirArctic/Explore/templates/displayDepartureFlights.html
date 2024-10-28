@@ -60,6 +60,7 @@ async function displayDepartureFlights() {
             <td>${flight.departureTime}</td>
             <td>${flight.arrivalDate}</td>
             <td>${flight.arrivalTime}</td>
+            <td>${flight.price}</td>
             
               <td><input type="button"  value="Select Flight" onClick="saveFlightId(${flight.id})"> </td>
             
@@ -137,6 +138,7 @@ function saveFlightId(selectedFlightId){
                     <th>Departure Time</th>
                     <th>Arrival Date</th>
                     <th>Arrival Time</th>
+                    <th>Price</th>
                     <th>Select Flight</th>
                 </tr>
             </thead>

@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'checkout.css' %}">
+
+    <style>
+    table,th, td {
+    padding: 15px;
+      }
+    </style>
+    
+
+</head>
+<body>
+
+<h2>Review Details</h2>
+
+<div id="passangerDiv">
+Member Info:
+
+<p id="memberInfo"></p>
+
+</div>
+
+<div id="tripDiv">
+Trip Info:
+
+<p id ="tripInfo"></p>
+
+<table>
+
+    <h3>Departing Flight</h3>
+  
+     
+    <tr>
+      <th>Flight No</th>
+      <th>Departure Airport</th>
+      <th>Destination Airport</th>
+      <th>Departure Date</th>
+      <th>Arrival Date</th>
+    </tr>
+    <tr>
+      <td id="d1"></td>
+      <td id="d2"></td>
+      <td id="d3"></td>
+      <td id="d4"></td>
+      <td id="d5"></td>
+    </tr>
+  
+  </table>
+  
+    <h3>Returning Flight</h3>
+  
+  <table>
+    <tr>
+      <th>Flight No</th>
+      <th>Departure Airport</th>
+      <th>Destination Airport</th>
+      <th>Departure Date</th>
+      <th>Arrival Date</th>
+    </tr>
+    <tr>
+      <td id="r1"></td>
+      <td id="r2"></td>
+      <td id="r3"></td>
+      <td id="r4"></td>
+      <td id="r5"></td>
+    </tr>
+  
+  </table>
+</div>
+<!--Payment div starts-->
+
+
+
+<h2>Responsive Checkout Form</h2>
+
+<div class="row">
+  <div class="col-75">
+    <div class="container">
+      <form  method = "post" action="{% url 'submitreviewform' %}">
+        {% csrf_token %}
+      <!--
+        <div class="row">
+          <div class="col-50">
+            <h3>Billing Address</h3>
+            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
+            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
+            <label for="email"><i class="fa fa-envelope"></i> Email</label>
+            <input type="text" id="email" name="email" placeholder="john@example.com">
+            <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
+            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street">
+            <label for="city"><i class="fa fa-institution"></i> City</label>
+            <input type="text" id="city" name="city" placeholder="New York">
+
+            <div class="row">
+              <div class="col-50">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" placeholder="NY">
+              </div>
+              <div class="col-50">
+                <label for="zip">Zip</label>
+                <input type="text" id="zip" name="zip" placeholder="10001">
+              </div>
+            </div>
+          </div>
+        -->
+          <div class="col-50">
+            <h3>Payment</h3>
+            <label for="fname">Accepted Cards</label>
+            <div class="icon-container">
+              <i class="fa fa-cc-visa" style="color:navy;"></i>
+              <i class="fa fa-cc-amex" style="color:blue;"></i>
+              <i class="fa fa-cc-mastercard" style="color:red;"></i>
+              <i class="fa fa-cc-discover" style="color:orange;"></i>
+            </div>
+            <label for="cname">Name on Card</label>
+            <input type="text" id="cname" name="cname" value="{{cname}}" placeholder="John More Doe">
+            <label for="ccnum">Credit card number</label>
+            <input type="text" id="ccnum" name="ccnum" value="{{ccnum}}" placeholder="1111-2222-3333-4444">
+            <label for="expmonth">Exp Month</label>
+            <input type="text" id="expmonth" name="expmonth" value="{{expmonth}}" placeholder="September">
+            <div class="row">
+              <div class="col-50">
+                <label for="expyear">Exp Year</label>
+                <input type="text" id="expyear" name="expyear" value="{{expyear}}" placeholder="2018">
+              </div>
+              <div class="col-50">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" value="{{cvv}}" placeholder="352">
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        <label>
+          <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+        </label>
+        <input type="submit" value="Continue to checkout" class="btn">
+      </form>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+<!--Payment div emds-->
+
+
+<div id="paymentDiv">
+
+
+</div>
+
+
+<script>
+//var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+
+var jsUrl = new URL(window.location.href);
+
+//var cleanUrl = jsUrl.replace(/[^a-z0-9]+/, '-');
+passanger = jsUrl.searchParams.get("passanger");
+trip = jsUrl.searchParams.get("trip");
+//ar returningFlightId = jsUrl.searchParams.get("returningFlight");
+//var passangers = jsUrl.searchParams.get("passanger");
+
+//console.log("url " + jsUrl)
+//console.log("flight id is:" + flightId)
+console.log(passanger)
+console.log(typeof(passanger))
+console.log(typeof(trip))
+
+parsedTrip=JSON.parse(trip)
+
+
+    d_f = parsedTrip['departingFlight']['flightNumber']
+    d_depart_airport = parsedTrip['departingFlight']['departureAirport']['iataCode']
+    d_dest_Airport = parsedTrip['departingFlight']['destinationAirport']['iataCode']
+    d_depart_date = parsedTrip['departingFlight']['departureDate']
+    d_arrival_date = parsedTrip['departingFlight']['arrivalDate']
+    d_price = parsedTrip['departingFlight']['price']
+
+
+    r_f = parsedTrip['returningFlight']['flightNumber']
+    r_depart_airport = parsedTrip['returningFlight']['departureAirport']['iataCode']
+    r_dest_Airport = parsedTrip['returningFlight']['destinationAirport']['iataCode']
+    r_depart_date = parsedTrip['returningFlight']['departureDate']
+    r_arrival_date = parsedTrip['returningFlight']['arrivalDate']
+    r_price = parsedTrip['returningFlight']['price']
+
+
+    document.getElementById('d1').innerHTML = d_f;
+    document.getElementById('d2').innerHTML = d_depart_airport;
+    document.getElementById('d3').innerHTML = d_dest_Airport;
+    document.getElementById('d4').innerHTML = d_depart_date;
+    document.getElementById('d5').innerHTML = d_arrival_date;
+
+
+
+    document.getElementById('r1').innerHTML = r_f;
+    document.getElementById('r2').innerHTML = r_depart_airport;
+    document.getElementById('r3').innerHTML = r_dest_Airport;
+    document.getElementById('r4').innerHTML = r_depart_date;
+    document.getElementById('r5').innerHTML = r_arrival_date;
+
+
+
+
+
+
+
+document.getElementById("memberInfo").innerHTML = passanger
+document.getElementById("tripInfo").innerHTML = trip
+</script>
+
+
+
+</body>
+</html>

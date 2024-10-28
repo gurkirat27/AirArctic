@@ -73,10 +73,7 @@ def retrieveAllAirports(request):
 
     if request.method == 'GET':
         airports = Airport.objects.all()
-
         serialized_item = AirportSerializer(airports, many=True)
-
-
         return Response(serialized_item.data)
 
     if request.method == 'POST':
@@ -92,7 +89,6 @@ def retrieveSingleAirport(request,id):
     if request.method == 'GET':
         airport  = Airport.objects.get(pk=id)
         serialized_item = AirportSerializer(airport)
-
         return Response(serialized_item.data)
     
     # ----------------------------------------------------------------------
@@ -105,12 +101,7 @@ def retrieveAllAircrats(request):
 
     if request.method == 'GET':
         aircrats = Aircraft.objects.all()
-
-
-
         serialized_item = AircraftSerializer(aircrats, many=True)
-
-
         return Response(serialized_item.data)
 
     if request.method == 'POST':
@@ -126,7 +117,6 @@ def retrieveSingleAircraft(request,id):
     if request.method == 'GET':
         aircraft  = Aircraft.objects.get(pk=id)
         serialized_item = AircraftSerializer(aircraft)
-
         return Response(serialized_item.data)
     
 
@@ -142,21 +132,12 @@ def retrieveSingleAircraft(request,id):
 def airportView(request):
     
    if request.method == 'GET':
-
-    items = Airport.objects.all()
-
-
-    #paginator = Paginator(items, 2)
     
-    #perpage = request.query_params.get('perpage', default=2)
-    #page = request.query_params.get('page', default = 1)
+    items = Airport.objects.all()
 
     perpage = request.GET.get('perpage', default=2)
     page = request.GET.get('page', default = 1)
-
     paginator = Paginator(items, per_page=perpage)
-
-    
 
     try:
        items = paginator.page(number=page)
@@ -164,9 +145,7 @@ def airportView(request):
     except EmptyPage:
        items = []
 
-   
     totalPages = items.paginator.num_pages
-
 
     itemData = {
        
@@ -195,35 +174,22 @@ def aircraftView(request):
 
     items = Aircraft.objects.all()
 
-
-    #paginator = Paginator(items, 2)
-    
-    #perpage = request.query_params.get('perpage', default=2)
-    #page = request.query_params.get('page', default = 1)
-
     perpage = request.GET.get('perpage', default=2)
     page = request.GET.get('page', default = 1)
-
     paginator = Paginator(items, per_page=perpage)
-
-    
 
     try:
        items = paginator.page(number=page)
 
     except EmptyPage:
        items = []
-
    
     totalPages = items.paginator.num_pages
 
-
-    itemData = {
-       
+    itemData = {      
        'items': items,
        'lastpage': totalPages,
        'totalPageList': [n+1 for n in range(totalPages)],
-
     }
    return render(request, "aircraftView.html", itemData)
 
@@ -253,14 +219,9 @@ def addFlight(request):
 
 #Index
 
-
 def index(request):
 
    return render(request, 'index.html')
-
-
-
-
 
    #========
 # WebApp Implementation 

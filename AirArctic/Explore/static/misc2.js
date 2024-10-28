@@ -24,6 +24,31 @@ async function makeTrip(selectedDepartingFlight, selectedReturningFlight) {
     }
 
 
+  async function addPassanger(firstName,lastName,dob) { 
+
+        
+            
+      const rawResponse = await fetch(`http://localhost:8000/api/passangers/`, {
+        method: 'POST',
+        body: JSON.stringify({
+          "firstName": firstName,
+          "lastName": lastName,
+          "dob": dob,
+  
+        }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+       },
+    });
+      const passanger = await rawResponse.json();
+  
+      console.log(passanger);
+      return passanger;
+    
+  
+      }
+
+
    
    
 async function getFlights(from, to, departure) {
@@ -67,7 +92,7 @@ function storesTripData(from, to){
 
 
 
-    async function getReturningFlights(from, to, returnDate) {
+async function getReturningFlights(from, to, returnDate) {
 
 
 
@@ -95,6 +120,14 @@ function storesTripData(from, to){
     }
 
     
+async function getBookingByReferenceNumber(bookingReferenceNumber) {
+      
 
-   
+      let booking =await fetch(`http://127.0.0.1:8000/api/bookings/?bookingReferenceNumber=${bookingReferenceNumber}`);
+
+      booking = await booking.json()
+      console.warn(booking)
+      return booking
+
+}
 

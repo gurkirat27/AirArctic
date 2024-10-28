@@ -1,0 +1,71 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+
+     
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+
+    <style>
+    table,th, td {
+    padding: 15px;
+      }
+    </style>
+    
+
+</head>
+<body onLoad= formLoop()>
+
+<h2>Who's Travelling</h2>
+
+<form id="passangerForm" method = "post" action="{% url 'submitpassangerPage' %}">
+    {% csrf_token %}
+
+
+  
+  <label for="firstName">First Name:</label><br>
+  <input type="text" id="firstName" name="firstName" value="{{firstName}}" required><br>
+  
+  <label for="lastName">Last Name:</label><br>
+  <input type="text" id="lastName" name="lastName" value="{{lastName}}" required><br>
+
+  <label for="dob">Date of Birth:</label><br>
+  <input type="date" id="dob" name="dob" value="{{dob}}" required><br>
+
+
+  <button type="submit" value="review" > Review Details & Checkout</button><br>
+
+</form> 
+
+
+<script>
+ 
+        var jsUrl = new URL(window.location.href);
+        var passangers = jsUrl.searchParams.get("passanger");
+
+        console.log("url " + jsUrl)
+        console.log("No of passangers:" + passangers)
+  
+        let passangerF =
+            document.getElementById("passangerForm");
+
+            console.log(typeof(passangerF))
+
+        function formLoop() {      
+
+               for (let i = 0; i < passangers; i++) {
+                
+                
+                  console.log(passangerF)
+                  $('body').show(passangerF)  
+                  
+                }
+            }
+            
+
+</script>
+
+</body>
+</html>

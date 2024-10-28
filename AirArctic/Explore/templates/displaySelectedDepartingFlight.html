@@ -47,6 +47,18 @@ async function displaySelectedDepartureFlight() {
 
     flightObjStr = JSON.stringify(flightObj)
 
+    d_f = flightObj['flightNumber']
+    d_depart_airport = flightObj['departureAirport']['iataCode']
+    d_dest_Airport = flightObj['destinationAirport']['iataCode']
+    d_depart_date = flightObj['departureDate']
+    d_arrival_date = flightObj['arrivalDate']
+
+    document.getElementById('d1').innerHTML = d_f;
+    document.getElementById('d2').innerHTML = d_depart_airport;
+    document.getElementById('d3').innerHTML = d_dest_Airport;
+    document.getElementById('d4').innerHTML = d_depart_date;
+    document.getElementById('d5').innerHTML = d_arrival_date;
+
     var parsedData = JSON.parse(flightObjStr);
 
 
@@ -55,8 +67,6 @@ async function displaySelectedDepartureFlight() {
     destinationAirportStr = JSON.stringify(flightObj.destinationAirport.iataCode)
 
     document.getElementById('output').innerHTML = flightObjStr;
-    document.getElementById('airCraftModelStr').innerHTML = parsedData.airCraft.aircraftModel;
-    document.getElementById('departureAirportStr').innerHTML = parsedData.departureAirport.iataCode;
 
     /* 
     document.getElementById('flightNumberQ').innerHTML = flightObj.flightId;
@@ -131,14 +141,26 @@ return to;
 
 </p>
 
-<p id="airCraftModelStr">
 
-</p>
+<table>
 
-<p id="departureAirportStr">
 
-</p>
+  <tr>
+    <th>Flight No</th>
+    <th>Departure Airport</th>
+    <th>Destination Airport</th>
+    <th>Departure Date</th>
+    <th>Arrival Date</th>
+  </tr>
+  <tr>
+    <td id="d1"></td>
+    <td id="d2"></td>
+    <td id="d3"></td>
+    <td id="d4"></td>
+    <td id="d5"></td>
+  </tr>
 
+</table>
 
 
 

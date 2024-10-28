@@ -27,6 +27,7 @@
         <th>Departure Time</th>
         <th>Arrival Date</th>
         <th>Arrival Time</th> 
+        <th>Price</th> 
         <th>Select Flight</th>
 
         {% for flight in flights %}
@@ -41,6 +42,7 @@
            <td>{{flight.departureTime}}</td>
            <td>{{flight.arrivalDate}}</td>
            <td>{{flight.arrivalTime}}</td>
+           <td>{{flight.price}}</td>
            <td> <button class="flight" type="button">Select Flight</button> </td>
         </tr>
 
@@ -53,25 +55,24 @@
     
 </body>
 </html>
-<!--
+
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         {% if items.has_previous %}
-      <li class="page-item"><a class="page-link" href="/api/airportList/?page=1">First</a></li>
-      <li class="page-item"><a class="page-link" href="/api/airportList/?page={{items.previous_page_number}}">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="/api/flightDisplay/?page=1">First</a></li>
+      <li class="page-item"><a class="page-link" href="/api/flightDisplay/?page={{items.previous_page_number}}">Previous</a></li>
         {% endif %}
 
         {% for n in totalPageList %}
-      <li class="page-item"><a class="page-link" href="/api/airportList/?page={{n}}">{{n}}</a></li>
+      <li class="page-item"><a class="page-link" href="/api/flightDisplay/?page={{n}}">{{n}}</a></li>
         {% endfor %}
 
       {% if items.has_next %}
-      <li class="page-item"><a class="page-link" href="/api/airportList/?page={{items.next_page_number}}">Next</a></li>
-      <li class="page-item"><a class="page-link" href="/api/airportList/?page={{lastpage}}">Last</a></li>
+      <li class="page-item"><a class="page-link" href="/api/flightDisplay/?page={{items.next_page_number}}">Next</a></li>
+      <li class="page-item"><a class="page-link" href="/api/flightDisplay/?page={{lastpage}}">Last</a></li>
       {% endif %}
 
       
     </ul>
   </nav>
 
--->
