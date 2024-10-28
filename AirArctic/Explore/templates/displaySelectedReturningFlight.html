@@ -3,8 +3,6 @@
 <html>
 
 <head>
-
-     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
 
@@ -14,7 +12,6 @@
       }
     </style>
     
-
 </head>
 <body onload="displaySelectedReturningFlight()">
 
@@ -33,64 +30,39 @@ console.log(url)
 
 async function displaySelectedReturningFlight() { 
 
-    
  let flightObj = await getFlightById(flightId)
+ flightObjStr = JSON.stringify(flightObj)
+ document.getElementById('output').innerHTML = flightObjStr;
 
-
-    console.log("coming from selected returning func")
-    console.log(flightObj)
-
-    flightObjStr = JSON.stringify(flightObj)
-
-    document.getElementById('output').innerHTML = flightObjStr;
 }
-
 
 async function getFlightById(flightId) {
 
+  let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
+  flight = await flight.json()
+  console.warn(flight)
 
-let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
+  var from = flight.departureAirport.iataCode
+  var to = flight.destinationAirport.iataCode
 
-flight = await flight.json()
-console.warn(flight)
-
-var from = flight.departureAirport.iataCode
-var to = flight.destinationAirport.iataCode
-
-
-
-console.log(from)
-
-return flight
-
-console.log("GetFlight by If func")
-
+  return flight
 }
 
-
 </script>
-
 
 <h2> Selected Returning Flight</h2>
 
 <p id="output">
-
 </p>
-
-<input type="button" value="View Trip" onClick="displayReturningFlights()" >
 
 <form  method = "post" action="{% url 'submititenaryform' %}">
   {% csrf_token %}
 
-
-<input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
-<input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
-
-
-<button type="submit" value="View Trip" > View Trip</button>
+  <input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
+  <input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
+  <button type="submit" value="View Trip" > View Trip</button>
 
 </form> 
-
 
 </body>
 </html>

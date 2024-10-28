@@ -4,10 +4,9 @@
 
 <head>
 
-     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'checkout.css' %}">
+    <link rel="stylesheet" href="{% static 'reviewDetails_card/checkout.css' %}">
 
     <style>
     table,th, td {
@@ -15,7 +14,6 @@
       }
     </style>
     
-
 </head>
 <body>
 
@@ -33,11 +31,9 @@ Trip Info:
 
 <p id ="tripInfo"></p>
 
+ 
+<h3>Departing Flight</h3> 
 <table>
-
-    <h3>Departing Flight</h3>
-  
-     
     <tr>
       <th>Flight No</th>
       <th>Departure Airport</th>
@@ -52,11 +48,9 @@ Trip Info:
       <td id="d4"></td>
       <td id="d5"></td>
     </tr>
-  
   </table>
   
     <h3>Returning Flight</h3>
-  
   <table>
     <tr>
       <th>Flight No</th>
@@ -72,12 +66,10 @@ Trip Info:
       <td id="r4"></td>
       <td id="r5"></td>
     </tr>
-  
   </table>
 </div>
+
 <!--Payment div starts-->
-
-
 
 <h2>Responsive Checkout Form</h2>
 
@@ -142,48 +134,26 @@ Trip Info:
         <label>
           <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
         </label>
-        <input type="submit" value="Continue to checkout" class="btn">
+        <input type="submit" value="Complete Booking" class="btn">
       </form>
     </div>
   </div>
 
 </div>
-
-
-
-
-
-
-
-
 <!--Payment div emds-->
 
-
-<div id="paymentDiv">
-
-
-</div>
-
-
 <script>
-//var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
 
 var jsUrl = new URL(window.location.href);
 
-//var cleanUrl = jsUrl.replace(/[^a-z0-9]+/, '-');
 passanger = jsUrl.searchParams.get("passanger");
 trip = jsUrl.searchParams.get("trip");
-//ar returningFlightId = jsUrl.searchParams.get("returningFlight");
-//var passangers = jsUrl.searchParams.get("passanger");
 
-//console.log("url " + jsUrl)
-//console.log("flight id is:" + flightId)
 console.log(passanger)
 console.log(typeof(passanger))
 console.log(typeof(trip))
 
 parsedTrip=JSON.parse(trip)
-
 
     d_f = parsedTrip['departingFlight']['flightNumber']
     d_depart_airport = parsedTrip['departingFlight']['departureAirport']['iataCode']
@@ -192,7 +162,6 @@ parsedTrip=JSON.parse(trip)
     d_arrival_date = parsedTrip['departingFlight']['arrivalDate']
     d_price = parsedTrip['departingFlight']['price']
 
-
     r_f = parsedTrip['returningFlight']['flightNumber']
     r_depart_airport = parsedTrip['returningFlight']['departureAirport']['iataCode']
     r_dest_Airport = parsedTrip['returningFlight']['destinationAirport']['iataCode']
@@ -200,14 +169,11 @@ parsedTrip=JSON.parse(trip)
     r_arrival_date = parsedTrip['returningFlight']['arrivalDate']
     r_price = parsedTrip['returningFlight']['price']
 
-
     document.getElementById('d1').innerHTML = d_f;
     document.getElementById('d2').innerHTML = d_depart_airport;
     document.getElementById('d3').innerHTML = d_dest_Airport;
     document.getElementById('d4').innerHTML = d_depart_date;
     document.getElementById('d5').innerHTML = d_arrival_date;
-
-
 
     document.getElementById('r1').innerHTML = r_f;
     document.getElementById('r2').innerHTML = r_depart_airport;
@@ -215,17 +181,9 @@ parsedTrip=JSON.parse(trip)
     document.getElementById('r4').innerHTML = r_depart_date;
     document.getElementById('r5').innerHTML = r_arrival_date;
 
-
-
-
-
-
-
-document.getElementById("memberInfo").innerHTML = passanger
-document.getElementById("tripInfo").innerHTML = trip
+    document.getElementById("memberInfo").innerHTML = passanger
+    document.getElementById("tripInfo").innerHTML = trip
 </script>
-
-
 
 </body>
 </html>

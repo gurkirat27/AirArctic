@@ -3,8 +3,7 @@
 <html>
 
 <head>
-
-     
+ 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
 
@@ -14,19 +13,14 @@
       }
     </style>
     
-
 </head>
 <body onload="displaySelectedDepartureFlight()">
 
 <p id="url">{{ request.get_full_path }}</p>
 
-
-
-
 <script>
 
 var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
-
 var jsUrl = new URL(window.location.href);
 var flightId = jsUrl.searchParams.get("flightId");
 
@@ -36,14 +30,10 @@ console.log(url)
 
 async function displaySelectedDepartureFlight() { 
 
-    
  let flightObj = await getFlightById(flightId)
-
 
     console.log("coming from selected departing func")
     console.log(flightObj)
-
-    
 
     flightObjStr = JSON.stringify(flightObj)
 
@@ -61,90 +51,56 @@ async function displaySelectedDepartureFlight() {
 
     var parsedData = JSON.parse(flightObjStr);
 
-
     airCraftModelStr = JSON.stringify(flightObj.airCraft.aircraftModel)
     departureAirportStr = JSON.stringify(flightObj.departureAirport.iataCode)
     destinationAirportStr = JSON.stringify(flightObj.destinationAirport.iataCode)
 
     document.getElementById('output').innerHTML = flightObjStr;
-
-    /* 
-    document.getElementById('flightNumberQ').innerHTML = flightObj.flightId;
-    document.getElementById('airCraftModelQ').innerHTML = flightObj.airCraft.airCraftModel;
-    document.getElementById('output').innerHTML = flightObjStr;
-    document.getElementById('departureAirportQ').innerHTML = flightObj.departureAirport.iataCode;
-    document.getElementById('destinationAirportQ').innerHTML = flightObj.destinationAirport.iataCode;
-    document.getElementById('departureDateQ').innerHTML = flightObj.departureDate;
-    document.getElementById('arrivalDateQ').innerHTML = flightObj.arrivalDate;
-    document.getElementById('departureTimeQ').innerHTML = flightObj.departureTime;
-    document.getElementById('arrivalTimeQ').innerHTML = flightObj.arrivalTime;
-  */
-    
+ 
 }
-
-
-
 
 async function getFlightById(flightId) {
 
+  let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
+  flight = await flight.json()
+  console.warn(flight)
 
-let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
+  var from = flight.departureAirport.iataCode
+  var to = flight.destinationAirport.iataCode
 
-flight = await flight.json()
-console.warn(flight)
+  document.getElementById('fromForm').value =  from
+  document.getElementById('toForm').value =  to
 
-var from = flight.departureAirport.iataCode
-var to = flight.destinationAirport.iataCode
-
-
-
-document.getElementById('fromForm').value =  from
-document.getElementById('toForm').value =  to
-
-console.log(from)
-
-return flight
-
-console.log("GetFlight by If func")
-
+  console.log(from)
+  return flight
 }
-
 
 async function retrieveFromValue(flightId){
 
   var fObj = await getFlightById(flightId)
-
   var from = fObj.departureAirport.iataCode
   var fromStr = JSON.stringify(from)
 
   return from;
-
 }
 
 async function retrieveToValue(flightId){
 
-var fObj = await getFlightById(flightId)
+  var fObj = await getFlightById(flightId)
+  var to = fObj.destinationAirport.iataCode
+  var toStr = JSON.stringify(to)
 
-var to = fObj.destinationAirport.iataCode
-var toStr = JSON.stringify(to)
-
-return to;
-
+  return to;
 }
 
 </script>
 
-
 <h2> Selected Departing Flight</h2>
 
 <p id="output">
-
 </p>
 
-
 <table>
-
-
   <tr>
     <th>Flight No</th>
     <th>Departure Airport</th>
@@ -159,67 +115,44 @@ return to;
     <td id="d4"></td>
     <td id="d5"></td>
   </tr>
-
 </table>
-
-
 
 <!--          -----------------------------------------------------------                          -->
 
-  
-
-  <form id="returnform"  method = "post" action="{% url 'submitreturnform' %}">
+<form id="returnform"  method = "post" action="{% url 'submitreturnform' %}">
     {% csrf_token %}
-
 
   <input type="text" id="fromForm" name="fromForm"hidden ><br>
   <input type="text" id="toForm" name="toForm"  hidden><br><br>
-
-  
-  <button type="submit" value="Search Flights" > Search Returning Flights</button>
-
+  <button type="submit" value="Search Flights" > Search Returning Flights</button>  
 </form> 
 
 <!--          -----------------------------------------------------------                          -->
 
 <form id ="itenaryform"  method = "post" action="{% url 'submititenaryform' %}">
-  {% csrf_token %}
+  {% csrf_token %}  
 
-
-<input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
-<input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
-
-
-<button type="submit" value="View Trip" > View Trip</button>
-
+  <input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
+  <input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
+  <button type="submit" value="View Trip" > View Trip</button>
 </form>
 
 <script>
 
 $('form').hide()
 
+//trip needs to come dynamically
 var tripD = "ROUNDTRIP";
 
 if (tripD == "ONEWAY") {
-
 $('#itenaryform').show();
 }
 
 else if (tripD == "ROUNDTRIP") {
-
 $('#returnform').show();
 }
 
-
-
-
-
 </script>
-
-
-
-
-
 
 </body>
 </html>

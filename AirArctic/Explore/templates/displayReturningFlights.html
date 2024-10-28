@@ -4,7 +4,6 @@
 
 <head>
 
-     
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
 
@@ -14,45 +13,32 @@
       }
     </style>
     
-
 </head>
 <body onload="displayReturningFlights()">
 
-
-
-<p>Getting from Render call: {{tripD}}</p>
-
- 
  <p id="url">{{ request.get_full_path }}</p>
 
 <script>
  
-var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
-
+ var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
  var jsUrl = new URL(window.location.href);
-
-
+ 
  var from = jsUrl.searchParams.get("from");
  var to = jsUrl.searchParams.get("to")
  var trip = jsUrl.searchParams.get("trip");
  var returnDate = jsUrl.searchParams.get("return");
 
-
-
-
-console.log(from);
-console.log(to)
-console.log(returnDate)
+ console.log(from);
+ console.log(to)
+ console.log(returnDate)
 
 
 async function displayReturningFlights() { 
 
-    
     let flightObj = await getReturningFlights(from, to, returnDate)
     document.getElementById('returningFlightData').innerHTML=flightObj.map((flight) => 
                 
         `<tr>
-
             <td>${flight.id}</td>
             <td>${flight.flightNumber}</td>
             <td>${flight.departureAirport.iataCode}</td>
@@ -62,28 +48,14 @@ async function displayReturningFlights() {
             <td>${flight.arrivalDate}</td>
             <td>${flight.arrivalTime}</td>
             <td>${flight.price}</td>
-
-        
-
             <td><input type="button"  value="Select Flight" onClick="saveFlightId(${flight.id})"> </td>
-
         </tr>`
-
     ).join("");
-
-        console.log("coming from returning func")
-        console.log(flightObj)
 }
 
 function saveFlightId(selectedFlightId){
-     
      var flight_id = selectedFlightId
 
-    // window.location.href = "/api/selectedReturningFlight/?flightId="+flight_id;
-     
-   // Submitreturnform view not used
-   //For now only using client side processing, better to use server side url redirect
-   
      $.ajax({
          type: "GET",
          url: "{% url 'submitreturnselectedform' %}", 
@@ -91,38 +63,20 @@ function saveFlightId(selectedFlightId){
              "flight_id" : flight_id,
          },
          success: function (data) {
- 
-             
-             
              //return window.location.href = "{% url 'submitreturnselectedform' %}"
-             window.location.href = "/api/selectedReturningFlight/?flightId="+flight_id;
- 
-             
+             window.location.href = "/api/selectedReturningFlight/?flightId="+flight_id;   
          },
          failure: function () {
              alert("failure");
          }
      });
-     
-     
- 
  }
 
 </script>
 
-   
-
-
-    
-
-
-
     <h2> Best Returning Flights</h2>
 
-
         <table style="border: 2px solid black;">
-               
-            
             <thead>
                 <tr>
                     <th>Id</th>
@@ -141,10 +95,7 @@ function saveFlightId(selectedFlightId){
                 <tr style="border: 1px solid black;">
                     
                 </tr>
-        
-
-    </tbody>
-</table>
-
+            </tbody>
+        </table>
 </body>
 </html>
