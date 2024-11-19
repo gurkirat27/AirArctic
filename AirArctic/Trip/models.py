@@ -1,5 +1,6 @@
 from django.db import models
 from Flight.models import Flight,Airport
+from django.contrib.auth.models import User
 import string
 import random
 #from AirArctic.Member.models import Member
@@ -56,6 +57,7 @@ class CardDetails(models.Model):
 class Booking(models.Model):
  
      bookingReferenceNumber = models.CharField(max_length=10)
+     user = models.ForeignKey(User, on_delete=models.PROTECT, default=1)
      trip = models.ForeignKey(Trip, on_delete=models.PROTECT, default=1)
      passanger = models.ForeignKey(Passengers, on_delete=models.PROTECT, default=1)
      payment = models.ForeignKey(CardDetails, on_delete=models.PROTECT, default=1)

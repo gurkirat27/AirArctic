@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_bootstrap5',
     'dajax',
     'corsheaders',
+    'rest_framework.authtoken',
      
 ]
 
@@ -133,6 +134,12 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+       # 'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 
 

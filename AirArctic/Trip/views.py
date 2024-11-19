@@ -66,6 +66,7 @@ def retrieveAllTrips(request):
 
     if trip == 'ROUNDTRIP':
 
+     print("Roundtrip serializer used")
            
      serialized_item = TripSerializer1(data = request.data)
 
@@ -77,6 +78,7 @@ def retrieveAllTrips(request):
 
     elif trip == 'ONEWAY':
       
+      print("Oneway serializer used")
       Trip.departingFlight_id == None   
        
       serialized_item = TripSerializer2(data = request.data)
@@ -232,13 +234,20 @@ def retrieveAllBookings(request):
         booking_obj = Booking.objects.all()
 
         booking_reference_number = request.query_params.get('bookingReferenceNumber')
+        member = request.query_params.get('member')
       
         #Filter results based on departure airport sent in the URL by client App
         if booking_reference_number:
            booking_obj = booking_obj.filter(bookingReferenceNumber = booking_reference_number)
 
+        #Filter results based on departure airport sent in the URL by client App
+        if member:
+           booking_obj = booking_obj.filter(user = member)
+
         serialized_item = BookingSerializer(booking_obj, many=True)
         return Response(serialized_item.data)
+    
+
 
     if request.method == 'POST':
        serialized_item = BookingSerializer(data = request.data)

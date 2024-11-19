@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+
+    <style>
+    </style>
+    
+</head>
+<body onload="displayMemberBooking()">
+    {{request.user}}
+    {% if request.user.is_authenticated %}
+    <a href ="/api/logout/" type="submit">Logout</a><br>
+    {% else %}
+    <a href ="/api/loginPage/" type="submit">LogIn</a><br>
+    {% endif %}
+
+    <script>
+ 
+        var jsUrl = new URL(window.location.href);
+        var member = jsUrl.searchParams.get("member");
+        
+        console.log("url " + jsUrl)
+        console.log("Member is:" + member)
+        
+        async function getBookingsByMember(member) {
+        
+              let booking =await fetch(`http://127.0.0.1:8000/api/bookings/?member=${member}`);
+              booking = await booking.json()
+              console.warn(booking)
+              return booking
+        
+        }
+        
+        async function displayMemberBooking() { 
+        
+            let bookingObj = await getBookingsByMember(member)
+
+            document.getElementById('bookingData1').innerHTML=bookingObj.map((booking) => 
+                
+        `<tr>
+            <td>${booking.bookingReferenceNumber}</td>
+            <td>${booking.user}</td>
+            <td>${booking.trip}</td>
+            <td><input type="button" value="Show Booking">
+
+        </tr>`
+    ).join("");
+
+
+            bookingStr = JSON.stringify(bookingObj)
+            document.getElementById('bookingData').innerHTML=bookingStr
+        
+        }
+        
+        </script>
+
+<h2>All Bookings</h2>
+
+
+<p id = "bookingData"></p>
+
+
+<h2> All Bookings</h2>
+
+<table style="border: 2px solid black;">
+    <thead>
+        <tr>
+            <th>Booking Reference Number</th>
+            <th>User</th>
+            <th>Trip</th>
+        </tr>
+    </thead>
+    <tbody id="bookingData1" >
+        <tr style="border: 1px solid black;">
+            
+        </tr>
+    </tbody>
+</table>
+
+ 
+
+</body>
+</html>

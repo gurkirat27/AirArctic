@@ -17,8 +17,12 @@ urlpatterns = [
     path('passangerPage/',views.displayPassengerPage, name='displayPassengerPage'),
     path('reviewDetails/',views.reviewDetails, name='reviewDetails'),
     path('bookingConfirmation/',views.bookingConfirmation, name='bookingConfirmation'),
+    path('loginPage/',views.login_page, name='login_page'),
+    path('register/',views.register_page, name='register_page'),
+    path('logout/',views.logout_page, name='logout_page'),
+    path('allBookings/',views.allMemberBookings, name='allMemberBookings'),
 
-
+    
     #Processing/Redirecting Endpoints
 
 
@@ -31,6 +35,6 @@ urlpatterns = [
     path('redirectPassangerPage/',views.redirectPassangerPage, name='redirectPassangerPage'),
     path('submitpassangerPage/',views.submitpassangerPage, name='submitpassangerPage'),
     path('submitreviewform/',views.submitreviewform, name='submitreviewform'),
-
+    path('redirectToAllBookings/',views.redirectToAllBookingsPage, name='redirectToAllBookingsPage'),
     
 ]

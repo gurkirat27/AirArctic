@@ -49,6 +49,8 @@ class CardDetailsSerializer(serializers.ModelSerializer):
         fields = ['id', 'nameOnCard', 'cardNumber', 'expiryMonth', 'expiryYear', 'cvv']
 
 class BookingSerializer(serializers.ModelSerializer):
+
+
     class Meta:
         model = Booking
-        fields = ['bookingReferenceNumber', 'trip', 'passanger', 'payment','isMember', 'contactEmail']
+        fields = ['bookingReferenceNumber','user', 'trip', 'passanger', 'payment','isMember', 'contactEmail']

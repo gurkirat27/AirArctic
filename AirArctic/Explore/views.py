@@ -3,7 +3,9 @@ from django.http import HttpResponse
 import json, requests
 from django.views.decorators.csrf import csrf_exempt
 import random, string
-
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 ## Page Display Views
@@ -52,6 +54,11 @@ def reviewDetails(request):
 def bookingConfirmation(request):
 
    return render(request, 'bookingConfirmation.html')
+
+###Display All Member bookings
+def allMemberBookings(request):
+
+   return render(request, 'displayUserBooking.html')
 
 #----------------------------------------------------------------------------------------------------------------------------#
 ## Data Processing Views
@@ -108,19 +115,23 @@ def submitexploreform(request):
 ###Once the suitable departing flight is selected
 def submitdepartureform(request):
       
+     try: 
 
       if request.method=="GET":
        
-
        selectedFlightId = request.GET.get("flight_id")
+       tripT = request.session['tripType']
        print("Slected flight id is = {}".format(selectedFlightId))
+       print("Trip Type is = {}".format(tripT))
 
-       url = "/api/selectedDepartureFlight/?flightId={}".format(selectedFlightId)
+       url = "/api/selectedDepartureFlight/?tripType={}&flightId={}".format(tripT,selectedFlightId)
 
        #Storing this data in session for further use
        request.session['dFlightId'] = selectedFlightId
 
-       return redirect(url)
+      return redirect(url)
+     except:
+      pass
  
 
 #----------------------------------------------------------#
@@ -190,9 +201,12 @@ def submititenaryform(request):
 
       }
 
-
-      url = "/api/itenary/?trip={}&departingFlight={}&returningFlight={}&passanger={}".format(tripType,departingFlight,returningFlight,passanger)
-
+      if tripType == "ONEWAY":
+       url = "/api/itenary/?trip={}&departingFlight={}&passanger={}".format(tripType,departingFlight,passanger)
+      
+      else: 
+       url = "/api/itenary/?trip={}&departingFlight={}&returningFlight={}&passanger={}".format(tripType,departingFlight,returningFlight,passanger)
+       
       return redirect(url)
   except:
    pass
@@ -335,6 +349,27 @@ def submitreviewform(request):
 
    #-------BOOKING PROCESSING-----
     
+    #Is Member
+    def checkIsMember():
+      if request.user.is_authenticated:
+       return True
+   
+      else:
+       return False
+      
+   
+    #Fetch User
+
+    def getUserId():
+      if request.user.is_authenticated:
+       return request.user.id
+   
+      else:
+       return 1
+
+    current_user = getUserId()
+    print(current_user)
+    
     #Fetch Trip Id
     trip_Id = request.session['trip_id']
   
@@ -344,14 +379,16 @@ def submitreviewform(request):
     #Fetch Card Id
     card_Id = request.session['card_id']
 
+    print("Prob here2")
     #Creating Random Booking Refernce Number
     brn= ''.join(random.choices(string.ascii_letters + string.digits, k=10))
-
+    
     bookingRefernceNumber=brn
+    user1 = current_user
     tripId=trip_Id
     passangerId= passanger_Id
     cardId = card_Id
-    isMember= False
+    isMember= checkIsMember()
     contactEmail= "gurkirat2773@gmail.com"
 
     #POST request to add Booking to database
@@ -359,8 +396,12 @@ def submitreviewform(request):
     header = {
       "Content-Type":"application/json"
      }
+    
+    print("Prob here1")
+
     payload ={
         "bookingReferenceNumber": bookingRefernceNumber,
+        "user": user1,
         "trip": tripId,
         "passanger": passangerId,
         "payment": cardId,
@@ -380,4 +421,79 @@ def submitreviewform(request):
 
   except:
     pass
+  
+def login_page(request):
+  
+  if request.method == "POST": 
+    usern = request.POST.get('username')
+    passw = request.POST.get('password') 
+
+    #usern= '_nav' 
+    #passw = '123'
+
+    print(usern, passw)
+
+    if not User.objects.filter(username = usern).exists():
+       messages.error(request, 'Invalid Username')
+       redirect('/api/loginPage/')
+
+    user = authenticate(username = usern, password = passw )
+
+    if user is None:
+       messages.error(request, "Invalid Password")
+       redirect('/api/loginPage/')
+
+    else: 
+      login(request, user)
+      return redirect("/api/exploreTrip/")
+
+      
+  
+  return render(request,'login.html')
+  
+def register_page(request):
+  
+  if request.method == "POST":
+    firstName = request.POST.get('first_name')
+    lastName = request.POST.get('last_name')
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+
+    user= User.objects.filter(username = username)
+
+    if user.exists():
+      messages.info(request, 'Username already exists')
+      return redirect('/api/register/')
+
+    user = User.objects.create(
+      first_name = firstName,
+      last_name = lastName,
+      username = username
+    )
+    user.set_password(password)
+  
+    user.save()
+    print(user)
+    messages.info(request, 'Account created successfully')
+    return redirect('/api/register/')
+  return render(request,'register.html')
+
+def logout_page(request):
+  
+  logout(request)
+
+  return redirect("/api/exploreTrip/")
+
+def redirectToAllBookingsPage(request):
+  if request.user.is_authenticated:
+   
+   uid = request.user.id
+   print(uid)
+   
+  
+  else:
+    uid = "Anonymous"
+    
+  url = "/api/allBookings/?member={}".format(uid)
+  return redirect(url)
   

@@ -16,6 +16,13 @@
 </head>
 <body onload="displaySelectedDepartureFlight()">
 
+  {{request.user}}
+  {% if request.user.is_authenticated %}
+  <a href ="/api/logout/" type="submit">Logout</a><br>
+  {% else %}
+  <a href ="/api/loginPage/" type="submit">LogIn</a><br>
+  {% endif %}
+
 <p id="url">{{ request.get_full_path }}</p>
 
 <script>

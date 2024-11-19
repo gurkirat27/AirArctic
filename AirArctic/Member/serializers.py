@@ -7,6 +7,11 @@ class MemberSerializer(serializers.ModelSerializer):
 
         fields = ['memberId', 'firstName', 'lastName', 'contactNumber', 'emailAddress', 'dateRegistered','rewardsLevel','totalPoints']
 
+class LoginSerializer(serializers.Serializer):
+        
+     username = serializers.CharField()
+     password = serializers.CharField()
+
 
 
 '''

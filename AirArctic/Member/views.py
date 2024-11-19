@@ -4,13 +4,44 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import Member
-from .serializers import MemberSerializer
+from .serializers import MemberSerializer, LoginSerializer
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
+from rest_framework.views import APIView
+from django.contrib.auth import authenticate
 
 #========
 # API Implementation 
 #========
+
+class LoginAPI(APIView):
+     def post(self, request):
+          data = request.data
+          serializer = LoginSerializer(data = data)
+          print(data)
+          if not serializer.is_valid():
+           return Response({
+               "status": False,
+               "data": serializer.errors
+           })
+          username = serializer.data['username']
+          password = serializer.data['password']
+
+          user_obj = authenticate(username = username, password = password)
+          if user_obj:
+             return Response({
+               "status": True,
+               "data": {'token':""}
+             })
+
+          return Response({
+               "status": False,
+               "data": {},
+               "message": "Invalid Credentials"
+           })
+
+          
+     
 
 #Retrieve All the Members
 
@@ -121,3 +152,5 @@ def redeemRewards(request,id):
         
         else:
             return HttpResponse('Specify Points redeemed')
+        
+

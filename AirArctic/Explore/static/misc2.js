@@ -1,6 +1,6 @@
 
    
-async function makeTrip(selectedDepartingFlight, selectedReturningFlight) { 
+async function makeTrip(selectedDepartingFlight, selectedReturningFlight, trip) { 
 
         
             

@@ -16,6 +16,15 @@
 </head>
 <body onload="displaySpecificBooking()">
 
+    <a href="{% url 'redirectToAllBookingsPage' %}">View All Bookings</a><br>
+
+    {{request.user}}
+    {% if request.user.is_authenticated %}
+    <a href ="/api/logout/" type="submit">Logout</a><br>
+    {% else %}
+    <a href ="/api/loginPage/" type="submit">LogIn</a><br>
+    {% endif %}
+
 <script>
  
 var jsUrl = new URL(window.location.href);

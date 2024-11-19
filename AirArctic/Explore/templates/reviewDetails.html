@@ -17,6 +17,13 @@
 </head>
 <body>
 
+  {{request.user}}
+{% if request.user.is_authenticated %}
+<a href ="/api/logout/" type="submit">Logout</a><br>
+{% else %}
+<a href ="/api/loginPage/" type="submit">LogIn</a><br>
+{% endif %}
+
 <h2>Review Details</h2>
 
 <div id="passangerDiv">
@@ -153,7 +160,9 @@ console.log(passanger)
 console.log(typeof(passanger))
 console.log(typeof(trip))
 
-parsedTrip=JSON.parse(trip)
+
+
+    parsedTrip=JSON.parse(trip)
 
     d_f = parsedTrip['departingFlight']['flightNumber']
     d_depart_airport = parsedTrip['departingFlight']['departureAirport']['iataCode']
@@ -162,25 +171,27 @@ parsedTrip=JSON.parse(trip)
     d_arrival_date = parsedTrip['departingFlight']['arrivalDate']
     d_price = parsedTrip['departingFlight']['price']
 
+    /*
     r_f = parsedTrip['returningFlight']['flightNumber']
     r_depart_airport = parsedTrip['returningFlight']['departureAirport']['iataCode']
     r_dest_Airport = parsedTrip['returningFlight']['destinationAirport']['iataCode']
     r_depart_date = parsedTrip['returningFlight']['departureDate']
     r_arrival_date = parsedTrip['returningFlight']['arrivalDate']
     r_price = parsedTrip['returningFlight']['price']
-
+  */
     document.getElementById('d1').innerHTML = d_f;
     document.getElementById('d2').innerHTML = d_depart_airport;
     document.getElementById('d3').innerHTML = d_dest_Airport;
     document.getElementById('d4').innerHTML = d_depart_date;
     document.getElementById('d5').innerHTML = d_arrival_date;
 
+/*
     document.getElementById('r1').innerHTML = r_f;
     document.getElementById('r2').innerHTML = r_depart_airport;
     document.getElementById('r3').innerHTML = r_dest_Airport;
     document.getElementById('r4').innerHTML = r_depart_date;
     document.getElementById('r5').innerHTML = r_arrival_date;
-
+*/
     document.getElementById("memberInfo").innerHTML = passanger
     document.getElementById("tripInfo").innerHTML = trip
 </script>

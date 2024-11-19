@@ -16,7 +16,19 @@
 </head>
 <body>
 
+  {{request.user}}
+{% if request.user.is_authenticated %}
+<a href ="/api/logout/" type="submit">Logout</a><br>
+{% else %}
+<a href ="/api/loginPage/" type="submit">LogIn</a><br>
+{% endif %}
+
+{% if request.user.is_authenticated %}
+<a href ="/api/redirectToAllBookings/" type="submit">View All Bookings</a><br>
+{%  endif %}
 <h2>Explore</h2>
+
+
 
 <form  method = "post" action="{% url 'submitexploreform' %}">
     {% csrf_token %}
