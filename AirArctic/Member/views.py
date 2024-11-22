@@ -3,8 +3,8 @@ from django.db import models
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Member
-from .serializers import MemberSerializer, LoginSerializer
+from .models import Member, MemberDetails
+from .serializers import MemberSerializer, LoginSerializer, MemberDetailsSerializer
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from rest_framework.views import APIView
@@ -152,5 +152,35 @@ def redeemRewards(request,id):
         
         else:
             return HttpResponse('Specify Points redeemed')
+        
+
+@api_view(['GET','POST'])
+def retrieveAllMembersDetails(request):
+
+    if request.method == 'GET':
+        members = MemberDetails.objects.all()
+        serialized_item = MemberDetailsSerializer(members, many=True)
+
+
+        return Response(serialized_item.data)
+
+    if request.method == 'POST':
+       serialized_item = MemberDetailsSerializer(data = request.data)
+       serialized_item.is_valid(raise_exception=True)
+       serialized_item.save()
+       return Response(serialized_item.data, status.HTTP_201_CREATED)
+
+#Retrieve specific Member by Id
+@api_view(['GET'])
+def retrieveSingleMemberDetail(request,id):
+
+    if request.method == 'GET':
+        member = MemberDetails.objects.get(pk=id)
+
+        serialized_item = MemberDetailsSerializer(member)
+
+        return Response(serialized_item.data)
+
+
         
 

@@ -3,27 +3,68 @@
 <html>
 
 <head>
-
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/explorePage.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <style>
-    table,th, td {
-    padding: 15px;
-      }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #DDD;
+}
+
+tr:hover {background-color: #D6EEEE;}
+
     </style>
     
 </head>
 <body onload="displayReturningFlights()">
 
-    {{request.user}}
-{% if request.user.is_authenticated %}
-<a href ="/api/logout/" type="submit">Logout</a><br>
-{% else %}
-<a href ="/api/loginPage/" type="submit">LogIn</a><br>
-{% endif %}
+    <div class="header">
 
- <p id="url">{{ request.get_full_path }}</p>
+        <div class="logo-div">
+        <a href="#default" class="logo">Air Arctic</a>
+        </div>
+        <div class="header-left">
+          <a class="active" href="/api/exploreTrip/">Search Flights</a>
+          <a href="/api/manageBooking/">Manage Booking</a>
+          <a href="#about">Flight Status</a>
+        </div>
+        <div class="header-right">
+          {% if request.user.is_authenticated %}
+          <div class="dropdown">
+            <button class="btn1 btn1-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              {{request.user}}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              <a class="dropdown-item" href="#">Air Arctic Rewards</a>
+              <a class="dropdown-item" href="#">Profile</a>
+              <a class="dropdown-item" href="/api/logout/">Logout</a>
+            </div>
+          </div>
+          {% else %}
+          <a href ="/api/loginPage/">Login</a>
+          <a href="/api/register/">Join Now</a>
+          {% endif %}
+          
+    
+        </div>
+      </div>
+      
+
+ <p id="url" style="color: white;">{{ request.get_full_path }}</p>
 
 <script>
  
@@ -104,5 +145,7 @@ function saveFlightId(selectedFlightId){
                 </tr>
             </tbody>
         </table>
+
+
 </body>
 </html>

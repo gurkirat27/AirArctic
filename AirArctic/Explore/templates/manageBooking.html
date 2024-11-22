@@ -3,31 +3,22 @@
 <html>
 
 <head>
- 
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/selectedDeparture.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explorePage.css' %}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <style>
 
-      
-      th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #DDD;
-      }
-      
-      tr:hover {background-color: #D6EEEE;}
-      
-          </style>
-    
+    </style>
+
 </head>
-<body onload="displaySelectedReturningFlight()">
+<body>
 
   <div class="header">
 
@@ -60,56 +51,40 @@
     </div>
   </div>
 
-<p id="url" style="color: white;">{{ request.get_full_path }}</p>
+<div class="explore">
 
-<script>
+    <h2>Manage Booking</h2>
+ 
+{% if request.user.is_authenticated %}
 
-var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+<form>
+<button type="submit" value="Display Bookings" ><a href ="/api/redirectToAllBookings/" type="submit">View All Bookings</a><br></button>
+</form>
 
-var jsUrl = new URL(window.location.href);
-var flightId = jsUrl.searchParams.get("flightId");
+{% else %}
+<a href ="/api/loginPage/" type="submit">LogIn To Display Bookings</a><br>
 
-console.log("url " + jsUrl)
-console.log("flight id is:" + flightId)
-console.log(url)
+<h4>OR</h4>
 
-async function displaySelectedReturningFlight() { 
+<form method = "post" action="{% url 'submitManageBookingForm' %}">
+<label for="brn">Search by Booking Reference Number:</label><br>
+<input type="text" id="bookingReferenceNumber" name="bookingReferenceNumber" value="{{bookingReferenceNumber}}" required><br><br>
 
- let flightObj = await getFlightById(flightId)
- flightObjStr = JSON.stringify(flightObj)
- document.getElementById('output').innerHTML = flightObjStr;
+<button type="submit" value="Search Booking" > Search Booking</button>
 
-}
+</form>
 
-async function getFlightById(flightId) {
+{% endif %}
 
-  let flight =await  fetch(`http://127.0.0.1:8000/api/flight/${flightId}`);
-  flight = await flight.json()
-  console.warn(flight)
+</div>
 
-  var from = flight.departureAirport.iataCode
-  var to = flight.destinationAirport.iataCode
-
-  return flight
-}
-
-</script>
-
-<h2> Selected Returning Flight</h2>
-
-<p id="output">
-</p>
-
-<form  method = "post" action="{% url 'submititenaryform' %}">
-  {% csrf_token %}
-
-  <input type="text" id="departingFlightId" name="departingFlightId" hidden ><br>
-  <input type="text" id="returningFlightId" name="returningFlightId"  hidden><br><br>
-  <button type="submit" value="View Trip" > View Trip</button>
-
-</form> 
-
-
+<div class="footer">
+  <div class="footer-right">
+    <a class="active" href="#home">Search Flights</a>
+    <a href="#contact">Manage Booking</a>
+    <a href="#about">Login</a>
+  </div>
+</div>
 
 </body>
 </html>

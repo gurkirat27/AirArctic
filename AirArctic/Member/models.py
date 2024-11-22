@@ -17,7 +17,7 @@ class Member(models.Model):
     lastName = models.CharField(max_length = 100)
     contactNumber = models.CharField(max_length = 10)
     emailAddress = models.EmailField()
-    dateRegistered = models.DateField()
+    dateRegistered = models.CharField(max_length = 100)
     rewardsLevel = models.CharField(max_length=10,choices=REWARD_CHOICES, default="BRONZE")
     totalPoints = models.IntegerField(default=0)
 
@@ -26,6 +26,21 @@ class Member(models.Model):
 
     def __str__(self)-> str:
         return self.memberId
+    
+class MemberDetails(models.Model):
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT, default = 1)
+    contactNumber = models.CharField(max_length = 10)
+    emailAddress = models.EmailField()
+    #dateRegistered = models.CharField(max_length = 100)
+    rewardsLevel = models.CharField(max_length=10,choices=REWARD_CHOICES, default="BRONZE")
+    totalPoints = models.IntegerField(default=0)
+
+    
+    
+
+    def __str__(self)-> str:
+        return self.user.username
 '''
 class LoyaltyProgram(models.Model):
 

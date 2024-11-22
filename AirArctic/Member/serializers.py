@@ -1,5 +1,10 @@
 from rest_framework import serializers
-from .models import Member
+from .models import Member, MemberDetails
+from django.contrib.auth.models import User
+
+from AirArctic import settings
+
+
 
 class MemberSerializer(serializers.ModelSerializer):
     class Meta:
@@ -7,10 +12,29 @@ class MemberSerializer(serializers.ModelSerializer):
 
         fields = ['memberId', 'firstName', 'lastName', 'contactNumber', 'emailAddress', 'dateRegistered','rewardsLevel','totalPoints']
 
+
 class LoginSerializer(serializers.Serializer):
         
      username = serializers.CharField()
      password = serializers.CharField()
+
+class CurrentUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('username', 'first_name', 'last_name')
+
+class MemberDetailsSerializer(serializers.HyperlinkedModelSerializer):
+
+   user = CurrentUserSerializer(read_only=True)
+   
+
+   class Meta:
+        model = MemberDetails
+
+        
+        fields = ['id', 'user', 'contactNumber', 'emailAddress','rewardsLevel','totalPoints']
+
+
 
 
 

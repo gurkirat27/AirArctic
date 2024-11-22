@@ -1,14 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
 
-</style>
+<head>
+   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/explorePage.css' %}">
+
 </head>
 <body>
-    </ul>
+
+  <div class="header">
+
+    <div class="logo-div">
+    <a href="#default" class="logo">Air Arctic</a>
+    </div>
+    <div class="header-left">
+      <a class="active" href="/api/exploreTrip/">Search Flights</a>
+      <a href="/api/manageBooking/">Manage Booking</a>
+      <a href="#about">Flight Status</a>
+    </div>
+    <div class="header-right">
+      {% if request.user.is_authenticated %}
+      <a href="/api/logout/">Logout</a>
+      {% else %}
+      <a href ="/api/loginPage/">Login</a>
+      {% endif %}
+      <a href="/api/register/">Join Now</a>
+    </div>
+  </div>
   
+  <div class="explore">
     <form method="post">
         <div class="container">
           <h1>Login</h1>
@@ -28,15 +51,24 @@
           <input type="text" placeholder="Enter Username" name="username" id="username" required>
       
           <label for="psw"><b>Password</b></label>
-          <input type="password" placeholder="Enter Password" name="password" id="password" required>
+          <input type="password" placeholder="Enter Password" name="password" id="password" required><br>
       
           <button type="submit" class="loginbtn">Login</button>
         </div>
-        
+        <br><br><br>
         <div class="container signin">
           <p>Don't have an account? <a href="/api/register/">Register</a>.</p>
         </div>
       </form>
+      </div>
+
+      <div class="footer">
+        <div class="footer-right">
+          <a class="active" href="#home">Search Flights</a>
+          <a href="#contact">Manage Booking</a>
+          <a href="#about">Login</a>
+        </div>
+      </div>
 </body>
 </html>
 

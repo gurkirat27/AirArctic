@@ -6,6 +6,8 @@ import random, string
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
+
+from django.forms.models import model_to_dict
 # Create your views here.
 
 ## Page Display Views
@@ -55,10 +57,21 @@ def bookingConfirmation(request):
 
    return render(request, 'bookingConfirmation.html')
 
+###Booking Page
+def manageBooking(request):
+
+   return render(request, 'manageBooking.html')
+
 ###Display All Member bookings
 def allMemberBookings(request):
 
    return render(request, 'displayUserBooking.html')
+
+###Display booking By Refernce Number
+def bookingByReferenceNumber(request):
+ 
+   return render(request, 'displayBookingByBrn.html')
+
 
 #----------------------------------------------------------------------------------------------------------------------------#
 ## Data Processing Views
@@ -458,6 +471,8 @@ def register_page(request):
     lastName = request.POST.get('last_name')
     username = request.POST.get('username')
     password = request.POST.get('password')
+    contact = request.POST.get('pn')
+    email = request.POST.get('email')
 
     user= User.objects.filter(username = username)
 
@@ -474,6 +489,8 @@ def register_page(request):
   
     user.save()
     print(user)
+    
+
     messages.info(request, 'Account created successfully')
     return redirect('/api/register/')
   return render(request,'register.html')
@@ -496,4 +513,54 @@ def redirectToAllBookingsPage(request):
     
   url = "/api/allBookings/?member={}".format(uid)
   return redirect(url)
-  
+
+@csrf_exempt
+def submitManageBookingForm(request):
+
+    if request.method=="POST":
+    
+    #---------CARD PROCESSING------------- 
+      #Retrieving card data from card form
+      brn = str(request.POST.get('bookingReferenceNumber'))
+      print(brn)
+
+    '''
+    # GET Request to Booking API
+
+    api_url = 'http://127.0.0.1:8000/api/bookings/'
+    result = requests.get(api_url, params={'bookingReferenceNumber': brn})
+    result_json = result.json()
+
+    print(result_json)
+
+  '''
+    
+    url = "/api/booking/?bookingReferenceNumber={}".format(brn)
+    return redirect(url)
+   
+
+
+"""
+    #Saving contact details
+     user1 = model_to_dict(user)
+     print(user)
+
+    #date1= "27-01-11"
+
+    url = "http://localhost:8000/api/membersDetails/"
+    header = {
+      "Content-Type":"application/json"
+     }
+    payload ={
+    "user" : user1,
+    "contactNumber": contact,
+    "emailAddress": email
+}
+    result = requests.post(url,  data=json.dumps(payload), headers=header)
+    result_json = result.json()
+    print(result_json)
+
+
+
+    #-----
+"""

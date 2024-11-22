@@ -3,151 +3,283 @@
 <html>
 
 <head>
-
+   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'reviewDetails_card/checkout.css' %}">
+    <script type="text/javascript" src="{% static 'checkoutForm.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/explorePage.css' %}">
+    <link rel="stylesheet" href="{% static 'reviewDetails_card/checkoutForm.css' %}">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 
     <style>
-    table,th, td {
-    padding: 15px;
-      }
-    </style>
+.tripTable {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.tripTableH, .tripTableD {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #DDD;
+}
+
+.tripTableR:hover {background-color: #D6EEEE;}
+
+.collapsible {
+  background-color: #777;
+  color: white;
+  cursor: pointer;
+  padding: 18px;
+  padding-bottom: 10px;
+  width: 100%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin-bottom: 20px;
+}
+
+
+.active, .collapsible:hover {
+  background-color: #555;
+}
+
+.content {
+  padding: 0 18px;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+.regionImg {
+  height: 50px;
+  width: 50px;
+}
+
+
+  </style>
     
 </head>
 <body>
 
-  {{request.user}}
-{% if request.user.is_authenticated %}
-<a href ="/api/logout/" type="submit">Logout</a><br>
-{% else %}
-<a href ="/api/loginPage/" type="submit">LogIn</a><br>
-{% endif %}
+  <div class="header">
+
+    <div class="logo-div">
+    <a href="#default" class="logo">Air Arctic</a>
+    </div>
+    <div class="header-left">
+      <a class="active" href="/api/exploreTrip/">Search Flights</a>
+      <a href="/api/manageBooking/">Manage Booking</a>
+      <a href="#about">Flight Status</a>
+    </div>
+    <div class="header-right">
+      {% if request.user.is_authenticated %}
+      <div class="dropdown">
+        <button class="btn1 btn1-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{request.user}}
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="#">Air Arctic Rewards</a>
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="/api/logout/">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <a href ="/api/loginPage/">Login</a>
+      <a href="/api/register/">Join Now</a>
+      <a class="region">Region</div>
+      {% endif %}
+      
+
+    </div>
+  </div>
+ <br>
+ <br>
 
 <h2>Review Details</h2>
 
-<div id="passangerDiv">
-Member Info:
 
-<p id="memberInfo"></p>
+<div class="tripAndPassangerDiv">
 
-</div>
+<button type="button" class="collapsible">Passanger Info</button>
 
-<div id="tripDiv">
-Trip Info:
-
-<p id ="tripInfo"></p>
-
- 
-<h3>Departing Flight</h3> 
-<table>
-    <tr>
-      <th>Flight No</th>
-      <th>Departure Airport</th>
-      <th>Destination Airport</th>
-      <th>Departure Date</th>
-      <th>Arrival Date</th>
-    </tr>
-    <tr>
-      <td id="d1"></td>
-      <td id="d2"></td>
-      <td id="d3"></td>
-      <td id="d4"></td>
-      <td id="d5"></td>
-    </tr>
-  </table>
+<div class="content" id="passangerDiv">
   
-    <h3>Returning Flight</h3>
-  <table>
-    <tr>
-      <th>Flight No</th>
-      <th>Departure Airport</th>
-      <th>Destination Airport</th>
-      <th>Departure Date</th>
-      <th>Arrival Date</th>
-    </tr>
-    <tr>
-      <td id="r1"></td>
-      <td id="r2"></td>
-      <td id="r3"></td>
-      <td id="r4"></td>
-      <td id="r5"></td>
-    </tr>
-  </table>
+  <p id="memberInfo"></p>
+  
+  </div>
+
+<button type="button" class="collapsible">Trip Info</button>
+<div class = "content" id="tripDiv">
+
+  <h4>Trip Info</h4>
+  
+  <h5>Departing Flight</h5> 
+  <table class="tripTable">
+      <tr class="tripTableR">
+        <th class="tripTableH">Flight No</th>
+        <th class="tripTableH">Departure Airport</th>
+        <th class="tripTableH">Destination Airport</th>
+        <th class="tripTableH">Departure Date</th>
+        <th class="tripTableH">Arrival Date</th>
+      </tr>
+      <tr class="tripTableR">
+        <td class="tripTableD" id="d1"></td>
+        <td class="tripTableD" id="d2"></td>
+        <td class="tripTableD" id="d3"></td>
+        <td class="tripTableD" id="d4"></td>
+        <td class="tripTableD"id="d5"></td>
+      </tr>
+    </table>
+    
+      <h5>Returning Flight</h5>
+  <table class="tripTable">
+      <tr class="tripTableR">
+        <th class="tripTableH">Flight No</th>
+        <th class="tripTableH">Departure Airport</th>
+        <th class="tripTableH">Destination Airport</th>
+        <th class="tripTableH">Departure Date</th>
+        <th class="tripTableH">Arrival Date</th>
+      </tr>
+      <tr class="tripTableR">
+        <td class="tripTableD" id="r1"></td>
+        <td class="tripTableD" id="r2"></td>
+        <td class="tripTableD" id="r3"></td>
+        <td class="tripTableD" id="r4"></td>
+        <td class="tripTableD"id="r5"></td>
+      </tr>
+    </table>
+  </div>
+  
 </div>
 
 <!--Payment div starts-->
 
-<h2>Responsive Checkout Form</h2>
 
-<div class="row">
-  <div class="col-75">
-    <div class="container">
-      <form  method = "post" action="{% url 'submitreviewform' %}">
+<!--
+<div>
+      <form  method = "post" action="{% url 'submitreviewform' %}" style="padding-left: 20px;">
         {% csrf_token %}
-      <!--
-        <div class="row">
-          <div class="col-50">
-            <h3>Billing Address</h3>
-            <label for="fname"><i class="fa fa-user"></i> Full Name</label>
-            <input type="text" id="fname" name="firstname" placeholder="John M. Doe">
-            <label for="email"><i class="fa fa-envelope"></i> Email</label>
-            <input type="text" id="email" name="email" placeholder="john@example.com">
-            <label for="adr"><i class="fa fa-address-card-o"></i> Address</label>
-            <input type="text" id="adr" name="address" placeholder="542 W. 15th Street">
-            <label for="city"><i class="fa fa-institution"></i> City</label>
-            <input type="text" id="city" name="city" placeholder="New York">
 
-            <div class="row">
-              <div class="col-50">
-                <label for="state">State</label>
-                <input type="text" id="state" name="state" placeholder="NY">
-              </div>
-              <div class="col-50">
-                <label for="zip">Zip</label>
-                <input type="text" id="zip" name="zip" placeholder="10001">
-              </div>
-            </div>
-          </div>
-        -->
-          <div class="col-50">
+          <div class="input-form">
             <h3>Payment</h3>
-            <label for="fname">Accepted Cards</label>
-            <div class="icon-container">
-              <i class="fa fa-cc-visa" style="color:navy;"></i>
-              <i class="fa fa-cc-amex" style="color:blue;"></i>
-              <i class="fa fa-cc-mastercard" style="color:red;"></i>
-              <i class="fa fa-cc-discover" style="color:orange;"></i>
-            </div>
             <label for="cname">Name on Card</label>
-            <input type="text" id="cname" name="cname" value="{{cname}}" placeholder="John More Doe">
+            <input type="text" id="cname" name="cname" value="{{cname}}" placeholder="John More Doe"><br><br>
+          
             <label for="ccnum">Credit card number</label>
-            <input type="text" id="ccnum" name="ccnum" value="{{ccnum}}" placeholder="1111-2222-3333-4444">
+            <input type="text" id="ccnum" name="ccnum" value="{{ccnum}}" placeholder="1111-2222-3333-4444"><br><br>
+
             <label for="expmonth">Exp Month</label>
             <input type="text" id="expmonth" name="expmonth" value="{{expmonth}}" placeholder="September">
-            <div class="row">
-              <div class="col-50">
-                <label for="expyear">Exp Year</label>
-                <input type="text" id="expyear" name="expyear" value="{{expyear}}" placeholder="2018">
-              </div>
-              <div class="col-50">
-                <label for="cvv">CVV</label>
-                <input type="text" id="cvv" name="cvv" value="{{cvv}}" placeholder="352">
-              </div>
-            </div>
-          </div>
-          
-        </div>
+
+            <label for="expyear">Exp Year</label>
+            <input type="text" id="expyear" name="expyear" value="{{expyear}}" placeholder="2018">
+
+            <label for="cvv">CVV</label>
+          <input type="text" id="cvv" name="cvv" value="{{cvv}}" placeholder="352">
+
+          </div><br><br>
         <label>
           <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
-        </label>
-        <input type="submit" value="Complete Booking" class="btn">
+        </label><br>
+        <input type="submit" value="Complete Booking" class="btn"><br>
       </form>
-    </div>
-  </div>
+      </div>
+      
+  </div><br>
+  </body>
+
+</div>-->
+<!--Payment div emds--><br>
+
+<div class='container'>
+  <div class='window'>
+    <div class='order-info'>
+      <div class='order-info-content'><br>
+        <h2>Payment Summary</h2>
+        <div class='line'></div>
+        <table class='order-table'>
+          <tbody>
+              <td>
+                <br> <span class='thin'>Air & Transportation charges: </span>
+              </td>
+            <tr><br>
+              <td>
+                <div class="price" id="totalBeforeTax"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="line"></div>
+        <table class='order-table'>
+          <tbody>
+              <td>
+                <br> <span class='thin'>Taxes and Other fees:</span>
+              </td>
+            <tr>
+              <td>
+                <div class='price' id="tax"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="line"></div>
+         <table class='order-table'>
+          <tbody>
+              <td>
+                <br> <span class='thin'>Trip Total:</span>
+              </td>
+            <tr>
+              <td>
+                <div class='price' id="tripTotal"></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    
+</div>
 
 </div>
-<!--Payment div emds-->
+        <div class='credit-info'>
+          <div class='credit-info-content'>
+            
+            <form  method = "post" action="{% url 'submitreviewform' %}" style="padding-left: 20px;">
+              {% csrf_token %}
+
+            <img src='https://dl.dropboxusercontent.com/s/ubamyu6mzov5c80/visa_logo%20%281%29.png' height='80' class='credit-card-image' id='credit-card-image'></img>
+            Card Number
+            <input type="text" id="ccnum" name="ccnum" value="{{ccnum}}" placeholder="1111-2222-3333-4444">
+            Card Holder
+            <input type="text" id="cname" name="cname" value="{{cname}}" placeholder="John More Doe"><br><br>
+            <table class='half-input-table'>
+              <tr>
+                <td > Expiry Month
+                  <input type="text"  id="expmonth" name="expmonth" value="{{expmonth}}" placeholder="September">
+                </td>
+                <td > Expiry year
+                  <input type="text"  id="expyear" name="expyear" value="{{expyear}}" placeholder="2018">
+                </td>
+  
+              </tr>
+              <tr>
+                <td>CVC
+                  <input type="text" id="cvv" name="cvv" value="{{cvv}}" placeholder="352">
+                </td>
+              </tr>
+            </table>
+            <input type="submit" value="Complete Booking" class="pay-btn"><br>
+            </form>
+
+          </div>
+
+        </div>
+      </div>
+</div>
+
 
 <script>
 
@@ -171,30 +303,67 @@ console.log(typeof(trip))
     d_arrival_date = parsedTrip['departingFlight']['arrivalDate']
     d_price = parsedTrip['departingFlight']['price']
 
-    /*
+   
     r_f = parsedTrip['returningFlight']['flightNumber']
     r_depart_airport = parsedTrip['returningFlight']['departureAirport']['iataCode']
     r_dest_Airport = parsedTrip['returningFlight']['destinationAirport']['iataCode']
     r_depart_date = parsedTrip['returningFlight']['departureDate']
     r_arrival_date = parsedTrip['returningFlight']['arrivalDate']
     r_price = parsedTrip['returningFlight']['price']
-  */
+  
     document.getElementById('d1').innerHTML = d_f;
     document.getElementById('d2').innerHTML = d_depart_airport;
     document.getElementById('d3').innerHTML = d_dest_Airport;
     document.getElementById('d4').innerHTML = d_depart_date;
     document.getElementById('d5').innerHTML = d_arrival_date;
+    //document.getElementById('d6').innerHTML = d_price;
 
-/*
+
     document.getElementById('r1').innerHTML = r_f;
     document.getElementById('r2').innerHTML = r_depart_airport;
     document.getElementById('r3').innerHTML = r_dest_Airport;
     document.getElementById('r4').innerHTML = r_depart_date;
     document.getElementById('r5').innerHTML = r_arrival_date;
-*/
+    //document.getElementById('r6').innerHTML = r_price;
+
+    
+
     document.getElementById("memberInfo").innerHTML = passanger
-    document.getElementById("tripInfo").innerHTML = trip
+    //document.getElementById("tripInfo").innerHTML = trip
+
+    tripTotal = parseFloat(d_price) + parseFloat(r_price)
+    document.getElementById("tripTotal").innerHTML  =  tripTotal
+    document.getElementById("tax").innerHTML  =  (11/100)*(parseFloat(tripTotal))
+    document.getElementById("totalBeforeTax").innerHTML  =  (parseFloat(tripTotal)) - ((11/100)*(parseFloat(d_price) + parseFloat(r_price)))
+
+
+
 </script>
+
+<script>
+  var coll = document.getElementsByClassName("collapsible");
+  var i;
+  
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function() {
+      this.classList.toggle("active");
+      var content = this.nextElementSibling;
+      if (content.style.display === "block") {
+        content.style.display = "none";
+      } else {
+        content.style.display = "block";
+      }
+    });
+  }
+  </script>
+
+<div class="footer">
+  <div class="footer-right">
+    <a class="active" href="#home">Search Flights</a>
+    <a href="#contact">Manage Booking</a>
+    <a href="#about">Login</a>
+  </div>
+</div>
 
 </body>
 </html>
