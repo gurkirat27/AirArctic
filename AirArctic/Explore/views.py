@@ -353,7 +353,7 @@ def submitreviewform(request):
      }
     result = requests.post(url,  data=json.dumps(payload), headers=header)
     result_json = result.json()
-
+    print(result_json)
     #Retreiving card Id from API response
     cardId= result_json["id"]
 
@@ -370,18 +370,15 @@ def submitreviewform(request):
       else:
        return False
       
+
    
     #Fetch User
-
-    def getUserId():
+    def getUserId1():
       if request.user.is_authenticated:
        return request.user.id
    
       else:
        return 1
-
-    current_user = getUserId()
-    print(current_user)
     
     #Fetch Trip Id
     trip_Id = request.session['trip_id']
@@ -392,12 +389,11 @@ def submitreviewform(request):
     #Fetch Card Id
     card_Id = request.session['card_id']
 
-    print("Prob here2")
     #Creating Random Booking Refernce Number
     brn= ''.join(random.choices(string.ascii_letters + string.digits, k=10))
     
     bookingRefernceNumber=brn
-    user1 = current_user
+    user1 = getUserId1()
     tripId=trip_Id
     passangerId= passanger_Id
     cardId = card_Id
@@ -414,10 +410,10 @@ def submitreviewform(request):
 
     payload ={
         "bookingReferenceNumber": bookingRefernceNumber,
-        "user": user1,
-        "trip": tripId,
-        "passanger": passangerId,
-        "payment": cardId,
+        "user_id": user1,
+        "trip_id": tripId,
+        "passanger_id": passangerId,
+        "payment_id": cardId,
         "isMember": isMember,
         "contactEmail": contactEmail
      }
@@ -471,8 +467,8 @@ def register_page(request):
     lastName = request.POST.get('last_name')
     username = request.POST.get('username')
     password = request.POST.get('password')
-    contact = request.POST.get('pn')
-    email = request.POST.get('email')
+    contact = str(request.POST.get('pn'))
+    email = str(request.POST.get('email'))
 
     user= User.objects.filter(username = username)
 
@@ -488,8 +484,35 @@ def register_page(request):
     user.set_password(password)
   
     user.save()
-    print(user)
     
+    """
+
+    Need a way to fetch user id of above created user
+    print(contact)
+    print(email)
+    print(user.id)
+
+
+    #POST request to add Booking to database
+    url = "http://localhost:8000/api/membersDetails/"
+    
+    header = {
+      "Content-Type":"application/json"
+     }
+
+    payload ={
+        "user_id" : 2,
+        "contactNumber": contact,
+        "emailAddress": email
+     }
+    
+    result = requests.post(url,  data=json.dumps(payload), headers=header)
+    result_json = result.json()
+  
+    print(user)
+    print(result_json)
+
+"""
 
     messages.info(request, 'Account created successfully')
     return redirect('/api/register/')

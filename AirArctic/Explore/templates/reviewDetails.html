@@ -59,6 +59,9 @@
   height: 50px;
   width: 50px;
 }
+.pointsConversion{
+  display: flex;
+}
 
 
   </style>
@@ -111,7 +114,7 @@
   
   <p id="memberInfo"></p>
   
-  </div>
+  </div><br>
 
 <button type="button" class="collapsible">Trip Info</button>
 <div class = "content" id="tripDiv">
@@ -153,9 +156,145 @@
         <td class="tripTableD"id="r5"></td>
       </tr>
     </table>
+  </div><br>
+
+<div class="inline">
+
+
+
+<!--
+
+<form>
+  <input type="checkbox" id="card" value="Pay with card">
+  <label for="donotpaywithrewards"> Pay with Card</label><br>
+  <h5>OR</h5>
+  <a href ="/api/loginPage/">Login to Pay with Air Arctic Rewards</a>
+</form>
+
+-->
+</div> 
+
+
+
+<button type="button" class="collapsible">Rewards Summary</button>
+
+  <div class="content1" id="rewardsSummaryDiv">
+
+  <div>
+    Air Arctic Rewards Level: <h5 id="userRewardsL"></h5>
+    Air Arctic Rewards Points: <h5 id="userRewardsP"></h5>
   </div>
+
   
-</div>
+ 
+  <div id="usePointsDiv"></div>
+  <form>
+    <input type="checkbox" id="yes" value="Pay with Air Arctic Rewards" onclick="checkIsChecked()">
+    <label for="paywithrewards">Pay with Air Arctic Rewards</label><br>
+  </form>
+  </div>
+
+  <div id="rewardsDivv">
+    <form>
+      
+              <input type="number" id="pr" name="pr" value="{{pr}}" default="0" placeholder="Points to be redeemed" oninput="pointsToDollarConversion(), validateMaxPoints()"><br>
+    
+              <input type="number" id="rv" name="rv" value="{{rv}}" placeholder=Redeemable Value default="0" disabled>
+              <span id="errorName"></span></br><br>
+    
+              <input type = "button" id="confirm-btn" value="Confirm Points to be redemeed" onClick="disableOnClick()"></button>
+              <input type = "button" id="edit-btn" value="Edit Points to be redemeed" onClick="editRedeemablePoints()" hidden></button>
+    
+    </form>
+    </div>
+    </div>
+    </body>
+
+
+</div><br>
+
+<script>
+  userRewardPoints = 20000;
+  bookingTotal= 130;
+
+  document.getElementById("userRewardsP").innerHTML = userRewardPoints;
+  document.getElementById("userRewardsL").innerHTML = "Silver"; 
+  
+  function pointsToDollarConversion() { 
+      var pointsR =  document.getElementById("pr").value;
+
+      var rValue = pointsR * 0.1;
+
+      document.getElementById("rv").value = rValue;
+
+  } 
+  function validateMaxPoints(){
+
+    var pointsRe =  document.getElementById("pr").value;
+    var reValue = document.getElementById("rv").value
+    if (pointsRe >= userRewardPoints){
+        document.getElementById("errorName").innerHTML = "Your donot have enough points";
+        document.getElementById("confirm-btn").disabled=true;
+    
+      }
+    else if((pointsRe <= userRewardPoints) && (reValue >= bookingTotal)){
+      document.getElementById("errorName").innerHTML = "Points Redemable value greater than Booking total";
+      document.getElementById("confirm-btn").disabled=true;
+    }
+    else {
+      document.getElementById("errorName").innerHTML = "";
+      document.getElementById("confirm-btn").disabled=false;
+    }
+
+}
+
+function disableOnClick(){
+
+  document.getElementById("pr").disabled=true;
+  document.getElementById("confirm-btn").hidden=true;
+  document.getElementById("edit-btn").hidden=false;
+
+  var dollarRedeemableValue =  document.getElementById("rv").value
+  document.getElementById("redeemableValue").innerHTML = dollarRedeemableValue
+
+  var amountLeft = tripTotal - dollarRedeemableValue
+  document.getElementById("amountLeft").innerHTML = amountLeft
+
+
+
+  alert("Points to be Redeemed:" +dollarRedeemableValue)
+
+}
+
+function editRedeemablePoints(){
+  document.getElementById("pr").disabled=false;
+  document.getElementById("confirm-btn").hidden=false;
+  document.getElementById("edit-btn").hidden=true;
+
+}
+
+
+
+function checkIsChecked(){
+
+
+
+  $('#yes').change(function(){
+    if($(this).is(":checked"))
+    $('#rewardsDivv').fadeIn('fast');
+    
+
+      
+   
+    else
+    $('#rewardsDivv').fadeOut('fast');
+    document.getElementById("redeemableValue").innerHTML = 0
+    document.getElementById("amountLeft").innerHTML = tripTotal
+    
+
+    });
+}
+</script>
 
 <!--Payment div starts-->
 
@@ -240,6 +379,32 @@
             </tr>
           </tbody>
         </table>
+        <div class="line"></div>
+        <table class='order-table'>
+         <tbody>
+             <td>
+               <br> <span class='thin'>Amount Paid with Points:</span>
+             </td>
+           <tr>
+             <td>
+               <div class='price' id="redeemableValue"></div>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+       <div class="line"></div>
+       <table class='order-table'>
+        <tbody>
+            <td>
+              <br> <span class='thin'>Amount to be paid:</span>
+            </td>
+          <tr>
+            <td>
+              <div class='price' id="amountLeft"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     
 </div>
 

@@ -21,18 +21,19 @@ class LoginSerializer(serializers.Serializer):
 class CurrentUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name')
+        fields = ('id','username', 'first_name', 'last_name')
 
 class MemberDetailsSerializer(serializers.HyperlinkedModelSerializer):
 
    user = CurrentUserSerializer(read_only=True)
+   user_id = serializers.IntegerField(write_only = True)
    
 
    class Meta:
         model = MemberDetails
 
         
-        fields = ['id', 'user', 'contactNumber', 'emailAddress','rewardsLevel','totalPoints']
+        fields = ['id', 'user', 'user_id', 'contactNumber', 'emailAddress','rewardsLevel','totalPoints']
 
 
 
