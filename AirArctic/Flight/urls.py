@@ -9,6 +9,10 @@ urlpatterns = [
     path('flights/',views.retrieveAllFlights),
     path('flight/<int:id>',views.retrieveSingleFlight),
 
+    # Fetch Flight Status endpoints
+    path('realTimeFlightStatus/',views.retrieveAllFlightStatus),
+    path('realTimeFlightStatus/<int:id>',views.retrieveSingleFlightStatus),
+
     # Fetch Airport endpoints
     path('airports/',views.retrieveAllAirports),
     path('airport/<int:id>',views.retrieveSingleAirport),
@@ -24,6 +28,8 @@ urlpatterns = [
     path('aircraftForm/',views.addAircraft, name='aircraftForm'),
     path('flightForm/',views.addFlight, name='flightForm'),
     path('flightDisplay/',views.flightView, name='flightsView'),
+    path('flightStatusList/',views.flightStatusView, name='flightStatusView'),
+    path('flightStatusForm/',views.addFlightStatus, name='flightStatusForm'),
 
     #Index
 

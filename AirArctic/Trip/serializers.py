@@ -71,9 +71,6 @@ class BookingSerializer(serializers.ModelSerializer):
     user_id = serializers.IntegerField(write_only = True)
     
 
-
-
-
     class Meta:
         model = Booking
-        fields = ['bookingReferenceNumber','user', 'trip', 'passanger', 'payment','isMember', 'contactEmail','passanger_id', 'payment_id', 'trip_id', 'user_id' ]
+        fields = ['id','bookingReferenceNumber','user', 'trip', 'passanger', 'payment','isMember', 'contactEmail','passanger_id', 'payment_id', 'trip_id', 'user_id' ]

@@ -23,6 +23,13 @@ urlpatterns = [
     path('allBookings/',views.allMemberBookings, name='allMemberBookings'),
     path('booking/',views.bookingByReferenceNumber, name='bookingByReferenceNumber'),
      path('manageBooking/',views.manageBooking, name='manageBooking'),
+    path('flightStatus/',views.flightStatus, name='flightStatus'),
+    path('viewStatus/',views.viewStatus, name='viewStatus'),
+    path('viewStatusByRoute/',views.viewStatusByRoute, name='viewStatusByRoute'),
+    path('modifyBooking/',views.modifyBooking, name='modifyBooking'),
+    path('modifyDepartureFlight/',views.modifyDepartureFlight, name='modifyDepartureFlight'),
+    path('modifySelectedDepartureFlight/',views.modifySelectedDepartureFlight, name='modifySelectedDepartureFlight'),
+    
     
 
     
@@ -40,6 +47,9 @@ urlpatterns = [
     path('submitreviewform/',views.submitreviewform, name='submitreviewform'),
     path('redirectToAllBookings/',views.redirectToAllBookingsPage, name='redirectToAllBookingsPage'),
     path('submitManageBookingForm/',views.submitManageBookingForm, name='submitManageBookingForm'),
-    
+    path('submitflightStatusByFnForm/',views.submitflightStatusByFnForm, name='submitflightStatusByFnForm'),
+    path('submitflightStatusByRouteForm/',views.submitflightStatusByRouteForm, name='submitflightStatusByRouteForm'),
+    path('submitTripId/',views.submitTripId, name='submitTripId'),
+    path('submitModifydepartureform/',views.submitModifydepartureform, name='submitModifydepartureform'),
     
 ]

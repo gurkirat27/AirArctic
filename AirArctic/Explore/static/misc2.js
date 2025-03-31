@@ -104,6 +104,22 @@ async function getReturningFlights(from, to, returnDate) {
         
     }
 
+
+async function getStatus(flightNumber) {
+      
+
+      let flightStatus =await fetch(`http://localhost:8000/api/realTimeFlightStatus/?flightNumber==${flightNumber}`);
+
+      flightStatus = await flightStatus.json()
+      console.warn(flightStatus)
+      return flightStatus
+
+
+      console.log("Orignal func")
+
+}
+
+
   
 
 
@@ -128,6 +144,17 @@ async function getBookingByReferenceNumber(bookingReferenceNumber) {
       booking = await booking.json()
       console.warn(booking)
       return booking
+
+}
+
+async function deleteBookingById(bookingId) {
+      
+
+  let booking =await fetch(`http://127.0.0.1:8000/api/bookings/?bookingReferenceNumber=${bookingReferenceNumber}`);
+
+  booking = await booking.json()
+  console.warn(booking)
+  return booking
 
 }
 

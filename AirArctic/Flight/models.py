@@ -41,3 +41,23 @@ class Flight(models.Model):
     def __str__(self)-> str:
         return self.flightNumber
     
+FLIGHT_STATUS_CHOICES = (
+    ("Scheduled ", "Scheduled "),
+    ("Delayed ", "Delayed "),
+    ("Departed", "Departed"),
+    ("In Air", "In Air"),
+    ("Landed", "Landed"),
+    ("Arrived", "Arrived"),
+    ("Cancelled", "Cancelled "),
+    ("Expected", "Expected"),
+    ("Past Flight", "Past Flight"),
+    ("Diverted", "Diverted"),
+)
+
+class FlightStatus(models.Model):
+    flight = models.ForeignKey(Flight, on_delete=models.PROTECT, default=1)
+    status = models.CharField(max_length=15, choices= FLIGHT_STATUS_CHOICES, default = "Scheduled")
+    
+    
+    def __str__(self)-> str:
+        return self.flight

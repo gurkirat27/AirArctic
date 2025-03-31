@@ -15,62 +15,94 @@ from django.forms.models import model_to_dict
 ###Display Explore Page
 def explore(request):
 
-   return render(request, 'exploreTrip.html')
+   return render(request, 'BookFlight/exploreTrip.html')
 
 ###Display Departure Flights Page
 def displayDepartureFlights(request):
 
-   return render(request, 'displayDepartureFlights.html')
+   return render(request, 'BookFlight/displayDepartureFlights.html')
 
 ###Display Returning Flights Page
 def displayReturningFlights(request):
 
-   return render(request, 'displayReturningFlights.html')
+   return render(request, 'BookFlight/displayReturningFlights.html')
 
 ###Display Selected Departing Flight Page
 def displaySelectedDepartureFlight(request):
 
-   return render(request, 'displaySelectedDepartingFlight.html')
+   return render(request, 'BookFlight/displaySelectedDepartingFlight.html')
 
 ###Display Selected Returning Flight Page
 def displaySelectedReturningFlight(request):
 
-   return render(request, 'displaySelectedReturningFlight.html')
+   return render(request, 'BookFlight/displaySelectedReturningFlight.html')
 
 ###Display Itenary Page
 def displayItenary(request):
 
-   return render(request, 'displayItenary.html')
+   return render(request, 'BookFlight/displayItenary.html')
 
 ###Display Passanger Form Page
 def displayPassengerPage(request):
 
-   return render(request, 'displayPassengerPage.html')
+   return render(request, 'BookFlight/displayPassengerPage.html')
 
 ###Display Flight Review Page
 def reviewDetails(request):
 
-   return render(request, 'reviewDetails.html')
+   return render(request, 'BookFlight/reviewDetails.html')
 
 ###Display Booking Page
 def bookingConfirmation(request):
 
-   return render(request, 'bookingConfirmation.html')
+   return render(request, 'BookFlight/bookingConfirmation.html')
 
 ###Booking Page
 def manageBooking(request):
 
-   return render(request, 'manageBooking.html')
+   return render(request, 'ManageBooking/manageBooking.html')
+
+###Flight Status
+def flightStatus(request):
+
+   return render(request, 'FlightStatus/flightStatus.html')
 
 ###Display All Member bookings
 def allMemberBookings(request):
 
-   return render(request, 'displayUserBooking.html')
+   return render(request, 'ManageBooking/displayUserBooking.html')
 
 ###Display booking By Refernce Number
 def bookingByReferenceNumber(request):
  
-   return render(request, 'displayBookingByBrn.html')
+   return render(request, 'ManageBooking/displayBookingByBrn.html')
+
+###Display status by flight number
+def viewStatus(request):
+ 
+   return render(request, 'FlightStatus/viewStatus.html')
+
+def viewStatusByRoute(request):
+ 
+   return render(request, 'FlightStatus/viewStatusByRoute.html')
+
+ 
+
+###Display Modify Booking page
+def modifyBooking(request):
+ 
+   return render(request, 'ManageBooking/modifyBooking.html')
+
+###Display Modify Departure Flights
+def modifyDepartureFlight(request):
+ 
+   return render(request, 'ManageBooking/UpdateDepartureFlight/displayUpdateDepartureFlights.html')
+
+###Display Modify Departure Selected Flights
+def modifySelectedDepartureFlight(request):
+ 
+   return render(request, 'ManageBooking/UpdateDepartureFlight/selectedDepartureUpdatedFlight.html')
+
 
 
 #----------------------------------------------------------------------------------------------------------------------------#
@@ -137,7 +169,7 @@ def submitdepartureform(request):
        print("Slected flight id is = {}".format(selectedFlightId))
        print("Trip Type is = {}".format(tripT))
 
-       url = "/api/selectedDepartureFlight/?tripType={}&flightId={}".format(tripT,selectedFlightId)
+       url = "/api/selectedDepartureFlight/?trip={}&flightId={}".format(tripT,selectedFlightId)
 
        #Storing this data in session for further use
        request.session['dFlightId'] = selectedFlightId
@@ -458,7 +490,7 @@ def login_page(request):
 
       
   
-  return render(request,'login.html')
+  return render(request,'Authentication/login.html')
   
 def register_page(request):
   
@@ -516,7 +548,7 @@ def register_page(request):
 
     messages.info(request, 'Account created successfully')
     return redirect('/api/register/')
-  return render(request,'register.html')
+  return render(request,'Authentication/register.html')
 
 def logout_page(request):
   
@@ -536,6 +568,8 @@ def redirectToAllBookingsPage(request):
     
   url = "/api/allBookings/?member={}".format(uid)
   return redirect(url)
+
+
 
 @csrf_exempt
 def submitManageBookingForm(request):
@@ -587,3 +621,85 @@ def submitManageBookingForm(request):
 
     #-----
 """
+
+
+def submitflightStatusByFnForm(request):
+
+  if request.method=="POST":
+
+   
+   flightNumber = request.POST.get('flightNumber')
+
+   
+   #url = "http://localhost:8000/api/realTimeFlightStatus/?flightNumber={}".format(flightNumber)
+
+   #result = requests.get(url)
+   #result_json = result.json()
+   #print(result_json)
+
+
+   #flightStatus= result_json["status"]
+  # print(flightStatus)
+
+
+   url = "/api/viewStatus/?flightNumber={}".format(flightNumber)
+
+   return redirect(url)
+
+
+
+def submitflightStatusByRouteForm(request):
+
+  if request.method=="POST":
+
+   
+   departureAirport = request.POST.get('departureAirport')
+   destinationAirport = request.POST.get('destinationAirport')
+   departureDate = request.POST.get('departureDate')
+
+   url = "/api/viewStatusByRoute/?departureAirport={}&destinationAirport={}&departureDate={}".format(departureAirport,destinationAirport,departureDate)
+
+   return redirect(url)
+  
+
+
+def submitTripId(request):
+      
+      
+      #Getting data from Itenary page
+      trip_id = request.POST.get("tripId")
+
+      request.session['trip_session_id'] = trip_id
+
+      print(trip_id)
+      
+
+      data = {
+            'trip_id':trip_id,
+      }
+
+      url = "/api/modifyBooking/?tripId={}".format(trip_id)
+      return redirect(url)
+
+
+###Once the suitable departing flight is selected
+def submitModifydepartureform(request):
+      
+     try: 
+
+      if request.method=="GET":
+       
+       selectedFlightId = request.GET.get("flight_id")
+       tripT = request.session['tripType']
+       print("Slected flight id is = {}".format(selectedFlightId))
+       print("Trip Type is = {}".format(tripT))
+
+       url = "/api/modifySelectedDepartureFlight/?trip={}&flightId={}".format(tripT,selectedFlightId)
+
+       #Storing this data in session for further use
+       request.session['dFlightId'] = selectedFlightId
+
+      return redirect(url)
+     except:
+      pass
+

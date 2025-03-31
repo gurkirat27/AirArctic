@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 Django Admin Password:
 
-
 Username: user
 Password: password
 
@@ -36,13 +35,20 @@ SECRET_KEY = 'django-insecure-fu8rk=)nh3+a&dh0zge=qbemkq3$=h6hq-*2)b)v*0opro_k&(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://0.0.0.0:3000']
-CORS_ORIGIN_ALLOW_ALL=True
+CSRF_TRUSTED_ORIGINS = ['http://localhost:3000', 'http://127.0.0.1:8000', 'http://localhost:8000/']
+
+CORS_ALLOWED_ORIGINS = [
+        'http://siteyouwantto.allow.com',
+        'http://anothersite.allow.com',
+        'http://127.0.0.1:8000', 
+        'http://localhost:8000/',
+    ]
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -58,7 +64,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_bootstrap5',
     'dajax',
-    'corsheaders',
+    #'corsheaders',
     'rest_framework.authtoken',
      
 ]
@@ -71,7 +77,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    #'corsheaders.middleware.CorsMiddleware',
+   
 
 ]
 
@@ -105,6 +112,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
 
 
 # Password validation
@@ -163,7 +172,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_COOKIE_NAME = "csrftoken"
 CSRF_HEADER_NAME = 'X-CSRFTOKEN'
-CSRF_TRUSTED_ORIGIN = ['http://.127.0.0.1', 'http://.localhost']
+CSRF_TRUSTED_ORIGIN = ['http://127.0.0.1', 'http://.localhost']
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SECURE= False
-

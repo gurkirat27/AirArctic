@@ -10,6 +10,7 @@ from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from .forms import PassangersForm, CardDetailsForm, BookingForm
+from rest_framework import generics
 
 # Create your views here.
 @csrf_exempt
@@ -88,6 +89,19 @@ def retrieveAllTrips(request):
       serialized_item.save()
             
       return Response(serialized_item.data, status.HTTP_201_CREATED )
+    
+#Retrieve specific Trip by  Trip Id
+@api_view(['GET'])
+def retrieveSingleTrip(request,id):
+    if request.method == 'GET':
+        trip  = Trip.objects.get(pk=id)
+        serialized_item = TripSerializer1(trip)
+        return Response(serialized_item.data)
+    
+class TripUpdateView(generics.UpdateAPIView):
+    queryset = Trip.objects.all()
+    serializer_class = TripSerializer1
+    
     
 
 #Retrieve All the  Passangers
@@ -255,6 +269,8 @@ def retrieveAllBookings(request):
        serialized_item.save()
        return Response(serialized_item.data, status.HTTP_201_CREATED)
     
+       
+    
 
 #Retrieve specific booking by  Booking Id
 @api_view(['GET','POST'])
@@ -263,6 +279,20 @@ def retrieveSingleBooking(request,id):
         booking  =Booking.objects.get(pk=id)
         serialized_item = BookingSerializer(booking)
         return Response(serialized_item.data)
+
+class BookingUpdateView(generics.UpdateAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+    
+
+#Delete specific booking by  Booking Id
+@api_view(['DELETE'])
+def deleteBooking(request,id):   
+    if request.method == 'DELETE':
+        booking  =Booking.objects.get(pk=id)
+        booking.delete()
+        return Response("Booking Deleted")
+       
     
 
 def viewBookings(request):
@@ -301,3 +331,5 @@ def addBooking(request):
 
    context = {'form': form}
    return render(request, 'bookingForm.html', context)
+
+
