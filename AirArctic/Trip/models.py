@@ -63,9 +63,31 @@ class Booking(models.Model):
      payment = models.ForeignKey(CardDetails, on_delete=models.PROTECT, default=1)
      isMember = models.BooleanField(default = False)
      contactEmail = models.EmailField()
+     isCheckedIn = models.BooleanField(default = False)
 
-
+class Baggage(models.Model):
 
     
+    carryOnQuantity = models.IntegerField()
+    checkedInQuantity = models.IntegerField()
+    specialBaggage = models.IntegerField()
 
 
+
+class Passport(models.Model):
+
+    passportNumber = models.CharField(max_length=16)
+    firstNameOnPassport = models.CharField(max_length=100)
+    lastNameOnPassport = models.CharField(max_length=100)
+    expiryDate = models.CharField()
+
+    def __str__(self)-> str:
+        return self.passportNumber
+
+class CheckIn(models.Model):
+ 
+     checkInNumber = models.CharField(max_length=10)
+     booking = models.ForeignKey(Booking, on_delete=models.PROTECT, default=1)
+     passport = models.ForeignKey(Passport, on_delete=models.PROTECT, default=1)
+     baggage = models.ForeignKey(Baggage, on_delete=models.PROTECT, default=1)
+     seatSelection = models.CharField(max_length=10)

@@ -3,14 +3,15 @@ from django.db import models
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Trip, Passengers, CardDetails, Booking
+from .models import Trip, Passengers, CardDetails, Booking, Passport, Baggage, CheckIn
 from Flight.models import Flight
-from .serializers import TripSerializer1, TripSerializer2, PassangerSerializer, CardDetailsSerializer, BookingSerializer
+from .serializers import TripSerializer1, TripSerializer2, PassangerSerializer, CardDetailsSerializer, BookingSerializer, PassportSerializer, BaggageSerializer, CheckInSerializer
 from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from .forms import PassangersForm, CardDetailsForm, BookingForm
+from .forms import PassangersForm, CardDetailsForm, BookingForm, BaggageForm, CheckInForm, PassportForm
 from rest_framework import generics
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 @csrf_exempt
@@ -273,12 +274,18 @@ def retrieveAllBookings(request):
     
 
 #Retrieve specific booking by  Booking Id
-@api_view(['GET','POST'])
+@api_view(['GET','POST','PUT'])
 def retrieveSingleBooking(request,id):
     if request.method == 'GET':
         booking  =Booking.objects.get(pk=id)
         serialized_item = BookingSerializer(booking)
         return Response(serialized_item.data)
+    
+    if request.method == 'PUT':
+      booking = get_object_or_404(Booking, pk=id)
+      serializer = BookingSerializer(booking, data=request.data)
+      serializer.is_valid(raise_exception=True)
+      return Response(serializer.data, status=status.HTTP_200_OK)
 
 class BookingUpdateView(generics.UpdateAPIView):
     queryset = Booking.objects.all()
@@ -333,3 +340,97 @@ def addBooking(request):
    return render(request, 'bookingForm.html', context)
 
 
+#---------------------------------------
+
+#Retrieve All the  Passangers
+
+@api_view(['GET','POST'])
+def retrieveAllPassports(request):
+
+    if request.method == 'GET':
+        passport = Passport.objects.all()
+        
+        serialized_item = PassportSerializer(passport, many=True)
+        return Response(serialized_item.data)
+
+    if request.method == 'POST':
+       serialized_item = PassportSerializer(data = request.data)
+       serialized_item.is_valid(raise_exception=True)
+       serialized_item.save()
+       return Response(serialized_item.data, status.HTTP_201_CREATED)
+    
+
+#Retrieve specific Pasanger by  Passanger Id
+@api_view(['GET','POST'])
+def retrieveSinglePassport(request,id):
+    if request.method == 'GET':
+        passport  = Passport.objects.get(pk=id)
+        serialized_item = PassportSerializer(passport)
+        return Response(serialized_item.data)
+    
+
+
+#--------
+
+@api_view(['GET','POST'])
+def retrieveAllBaggages(request):
+
+    if request.method == 'GET':
+        baggage = Baggage.objects.all()
+        serialized_item = BaggageSerializer(baggage, many=True)
+        return Response(serialized_item.data)
+
+    if request.method == 'POST':
+       serialized_item = BaggageSerializer(data = request.data)
+       serialized_item.is_valid(raise_exception=True)
+       serialized_item.save()
+       return Response(serialized_item.data, status.HTTP_201_CREATED)
+    
+
+#Retrieve specific Pasanger by  Passanger Id
+@api_view(['GET','POST'])
+def retrieveSingleBaggage(request,id):
+    if request.method == 'GET':
+        baggage  = Baggage.objects.get(pk=id)
+        serialized_item = BaggageSerializer(baggage)
+        return Response(serialized_item.data)
+    
+
+#--------
+
+@api_view(['GET','POST','PUT'])
+def retrieveAllCheckIns(request):
+
+    if request.method == 'GET':
+        checkIn= CheckIn.objects.all()
+
+        checkin_reference_number = request.query_params.get('checkInNumber')
+      
+        #Filter results based on departure airport sent in the URL by client App
+        if checkin_reference_number:
+          checkIn = checkIn.filter(checkInNumber = checkin_reference_number)
+
+        serialized_item = CheckInSerializer(checkIn, many=True)
+        return Response(serialized_item.data)
+
+    if request.method == 'POST':
+       serialized_item = CheckInSerializer(data = request.data)
+       serialized_item.is_valid(raise_exception=True)
+       serialized_item.save()
+       return Response(serialized_item.data, status.HTTP_201_CREATED)
+    
+
+#Retrieve specific Pasanger by  Passanger Id
+@api_view(['GET','POST', 'PUT'])
+def retrieveSingleCheckIn(request,id):
+    if request.method == 'GET':
+        checkIn  = CheckIn.objects.get(pk=id)
+        serialized_item = CheckInSerializer(checkIn)
+        return Response(serialized_item.data)
+    
+    if request.method == 'PUT':
+      checkin = get_object_or_404(CheckIn, pk=id)
+      serializer = CheckInSerializer(checkin, data=request.data)
+      serializer.is_valid(raise_exception=True)
+      return Response(serializer.data, status=status.HTTP_200_OK)
+    

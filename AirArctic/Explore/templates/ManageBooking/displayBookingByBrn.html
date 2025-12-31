@@ -96,7 +96,25 @@ async function displaySpecificBooking() {
 
     let bookingObj = await getBookingByReferenceNumber(bookingReferenceNumber)
     bookingStr = JSON.stringify(bookingObj)
+    bookingD = JSON.parse(bookingStr)
     document.getElementById('bookingData').innerHTML=bookingStr
+    
+
+    const data = JSON.parse(bookingStr);
+    const isCheckedIn = data[0].isCheckedIn;
+
+    console.log(isCheckedIn);
+
+  if (isCheckedIn) {
+    document.getElementById("checkedInBtn").style.display = "inline-block";
+  } else {
+    document.getElementById("notCheckedInBtn").style.display = "inline-block";
+  }
+
+  function takeToCheckIn(){
+    
+  }
+  
 
 }
 
@@ -110,7 +128,27 @@ async function displaySpecificBooking() {
 
     <p id = "bookingData"></p>
 
-    </div>
+    <div>
+
+
+
+  <button id="checkedInBtn" style="display:none;"" onClick="takeToCheckIn()">
+  Boarding Pass
+  </button>
+
+  <button id="notCheckedInBtn" style="display:none;">
+  Check In Now
+  </button>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
 
 
     <div class = "pre-footer" style="background-color: black; color: white;  padding: 10px; padding-left:80px; font-size:20px; "> <h5>Air Arctic > Booking</h5></div> 

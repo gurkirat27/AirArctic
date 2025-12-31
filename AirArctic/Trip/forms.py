@@ -1,5 +1,5 @@
 from django import forms
-from .models import Passengers, CardDetails, Booking
+from .models import Passengers, CardDetails, Booking, Passport, Baggage, CheckIn
 
 class PassangersForm(forms.ModelForm):
     class Meta:
@@ -16,3 +16,17 @@ class BookingForm(forms.ModelForm):
         model = Booking
         fields = '__all__'
 
+class PassportForm(forms.ModelForm):
+    class Meta:
+        model = Passport
+        fields = '__all__'
+
+class BaggageForm(forms.ModelForm):
+    class Meta:
+        model = Baggage
+        fields = '__all__'
+
+class CheckInForm(forms.ModelForm):
+    class Meta:
+        model = CheckIn
+        fields = '__all__'

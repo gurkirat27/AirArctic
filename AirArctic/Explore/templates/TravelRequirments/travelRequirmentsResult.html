@@ -1,0 +1,248 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+ 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="{% static 'misc2.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/selectedDeparture.css' %}">
+    <link rel="stylesheet" href="{% static 'css/explorePage.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <style>
+
+      
+      th, td {
+        padding: 8px;
+        text-align: left;
+        border-bottom: 1px solid #DDD;
+      }
+      
+      tr:hover {background-color: #D6EEEE;}
+	  
+
+.item1 { grid-area: header1; }
+.item2 { grid-area: menu; }
+.item3 { grid-area: main; }
+.item4 { grid-area: right; }
+.item5 { grid-area: footer1; }
+.item6 { grid-area: footer2; }
+.item7 { grid-area: footer3; }
+.item8 { grid-area: header2; }
+.item9 { grid-area: header3; }
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'menu header1 header2 header3 right '
+    'menu main main main  right'
+    'menu footer1 footer2 footer3 right ';
+  gap: 10px;
+  background-color: white;
+  padding: 5px;
+}
+
+.grid-container > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 10px 0;
+  font-size: 30px;
+}
+
+.lineImg {
+
+  height: 40px;
+  width: 100%;
+
+}
+
+.airplaneImg {
+  height: 150px;
+  width: 50%;
+}
+
+.item3 {
+  height: 50px;
+}
+
+.item1, .item8, .item9 {
+  height: 50px;
+}
+.item5, .item6, .item7 {
+  height: 50px;
+}
+
+.item2, .item4 {
+
+  height: 190px;
+}
+
+.grid-container-footer {
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        gap: 5px;
+        padding: 20px;
+        padding-left:80px;
+       
+      }
+      .grid-container-footer > div {
+
+        color: white;
+        padding: 10px;
+        font-size: 15px;
+        text-align: left;
+      }
+      li {
+         list-style-type: none;
+        }
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #DDD;
+}
+
+tr:hover {background-color: #D6EEEE;}
+          </style>
+    
+</head>
+<body>
+  <div class="header">
+
+    <div class="logo-div">
+    <a href="#default" class="logo">Air Arctic</a>
+    </div>
+    <div class="header-left">
+      <a class="active" href="/api/exploreTrip/">Search Flights</a>
+      <a href="/api/manageBooking/">Manage Booking</a>
+      <a href="/api/flightStatus/">Flight Status</a>
+    </div>
+    <div class="header-right">
+      {% if request.user.is_authenticated %}
+      <div class="dropdown">
+        <button class="btn1 btn1-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{request.user}}
+        </button>
+        <div class="dropdown-menu" id="dropdown-menu" aria-labelledby="dropdownMenuButton">
+          <a class="dropdown-item" href="/api/rewards/">Air Arctic Rewards</a>
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" href="/api/logout/">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <a href ="/api/loginPage/">Login</a>
+      <a href="/api/register/">Join Now</a>
+      {% endif %}
+      
+
+    </div>
+  </div>
+
+
+<p id="url" style="color: white;">{{ request.get_full_path }}</p>
+
+<div class="selectedDepartingFlight" style="min-height: 650px;">
+
+<h2> Travel Requirments Info</h2>
+
+
+<!-- Experiment ---------------------------------------->
+
+
+<table>
+
+
+   
+  <tr>
+    <th>Passport</th>
+    <th>Destination</th>
+    <th>Travel Eligibilty</th>
+  </tr>
+  <tr>
+    <td id="passport"></td>
+    <td id="destination"></td>
+    <td id="travelEligibilty"></td>
+
+  </tr>
+
+</table>
+
+</div>
+
+
+<script>
+
+var url =  "http://127.0.0.1:8000"+document.getElementById('url').innerHTML;
+var jsUrl = new URL(window.location.href);
+var passport = jsUrl.searchParams.get("passport");
+var travellingTo = jsUrl.searchParams.get("travellingTo");
+var eligibilty = passport +" passport holders, travelling to "+ travellingTo + " need a visa issued by "+ travellingTo +" government" 
+
+document.getElementById("passport").innerHTML = passport;
+document.getElementById("destination").innerHTML = travellingTo;
+document.getElementById("travelEligibilty").innerHTML = eligibilty;
+
+</script>
+
+
+
+<div class = "pre-footer" style="background-color: black; color: white;  padding: 10px; padding-left:80px; font-size:20px; "> <h5>Air Arctic > Travel Requirments Information</h5></div> 
+<div class="footer">
+  <div class="grid-container-footer">
+    <div> <h6>About</h6>
+          <li>About Us</li>
+          <li>Careers</li>
+    </div>
+    <div> <h6>Manage</h6>
+      <li>Check In</li>
+      <li>Manage Your Flight</li>
+      <li>Flight Status</li>
+    </div>
+    <div> <h6>Book</h6>
+      <li>Book Your Flight</li>
+      <li>Search For Flight</li>
+      <li>Planning Your Trip</li>
+    </div> 
+    <div> <h6>Loyalty</h6>
+      <li>Login Into Air Arctic Rewards</li>
+      <li>Join Air Arctic Rewards</li>
+    </div>
+    <div> <h6>Subscribe To Our Special Offers</h6><br>
+      <form method = "post">
+        {% csrf_token %}
+        <input type="text" id="subscribeEmail" name="subscribeEmail" value="{{subscribeEmail}}" placeholder="Email Address" >
+        <input type="submit" value="Subscribe" ></input>
+        </form>
+    </div>
+    <div> <h6>Before You Fly</h6>
+      <li>Baggage</li>
+      <li>Visa & Passport Info</li>
+      <li>Seats</li>
+    </div>  
+    <div> <h6>Help</h6>
+      <li>Help Centre</li>
+      <li>Contact an Agent</li>
+    </div>
+    <div><h6>Feedback</h6>
+      <form method = "post">
+        {% csrf_token %}
+        <input type="submit" value="Site Feedback" ></input>
+        </form>
+    </div>
+  </div>
+  </div>
+</div>
+
+
+
+</body>
+</html>

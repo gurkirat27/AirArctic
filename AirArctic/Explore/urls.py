@@ -30,8 +30,16 @@ urlpatterns = [
     path('modifyDepartureFlight/',views.modifyDepartureFlight, name='modifyDepartureFlight'),
     path('modifySelectedDepartureFlight/',views.modifySelectedDepartureFlight, name='modifySelectedDepartureFlight'),
     
+    path('rewards/',views.viewRewards, name='viewRewards'),
+    path('baggage/',views.viewBaggage, name='viewBaggage'),
+    path('baggage/economy',views.viewEconomyBaggage, name='viewEconomyBaggage'),
+    path('baggage/business',views.viewBusinessBaggage, name='viewBusinessBaggage'),
+    path('baggage/first',views.viewFirstBaggage, name='viewFirstBaggage'),
+    path('travelRequirments/',views.viewTravelRequirmentTool, name='viewTravelRequirmentTool'),
+    path('travelRequirmentResult/',views.viewTravelRequirmentResult, name='viewTravelRequirmentResult'),
+    path('checkin/',views.viewCheckIn, name='viewCheckIn'),  
+    path('boardingPass/',views.viewboardinPass, name='viewboardinPass'),  
     
-
     
     #Processing/Redirecting Endpoints
 
@@ -51,5 +59,7 @@ urlpatterns = [
     path('submitflightStatusByRouteForm/',views.submitflightStatusByRouteForm, name='submitflightStatusByRouteForm'),
     path('submitTripId/',views.submitTripId, name='submitTripId'),
     path('submitModifydepartureform/',views.submitModifydepartureform, name='submitModifydepartureform'),
+    path('submittravelForm/',views.submittravelform, name='submittravelform'),
+    path('submitcheckInPage/',views.submitcheckInPage, name='submitcheckInPage'),
     
 ]

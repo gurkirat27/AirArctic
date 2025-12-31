@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Trip, Passengers, CardDetails, Booking
+from .models import Trip, Passengers, CardDetails, Booking, Baggage, Passport, CheckIn
 from Flight.serializers import FlightSerializer
 from Member.serializers import CurrentUserSerializer
 from Flight.models import Flight, Airport
@@ -73,4 +73,32 @@ class BookingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Booking
-        fields = ['id','bookingReferenceNumber','user', 'trip', 'passanger', 'payment','isMember', 'contactEmail','passanger_id', 'payment_id', 'trip_id', 'user_id' ]
+        fields = ['id','bookingReferenceNumber','user', 'trip', 'passanger', 'payment','isMember', 'contactEmail','isCheckedIn','passanger_id', 'payment_id', 'trip_id', 'user_id' ]
+
+
+
+class PassportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Passport
+        fields = ['id', 'passportNumber', 'firstNameOnPassport', 'lastNameOnPassport', 'expiryDate']
+
+class BaggageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Baggage
+        fields = ['id', 'carryOnQuantity', 'checkedInQuantity', 'specialBaggage']
+
+
+class CheckInSerializer(serializers.ModelSerializer):
+
+    passport = PassportSerializer(read_only = True)
+    baggage = BaggageSerializer(read_only = True)
+    booking = BookingSerializer(read_only = True)
+
+
+    passport_id = serializers.IntegerField(write_only = True)
+    baggage_id = serializers.IntegerField(write_only = True)
+    booking_id = serializers.IntegerField(write_only = True)
+
+    class Meta:
+        model = CheckIn
+        fields = ['id','checkInNumber','passport_id','baggage_id','booking_id', 'baggage', 'passport','booking', 'seatSelection']

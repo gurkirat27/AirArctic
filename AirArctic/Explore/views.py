@@ -93,6 +93,55 @@ def modifyBooking(request):
  
    return render(request, 'ManageBooking/modifyBooking.html')
 
+###Display Rewards Page
+def viewRewards(request):
+ 
+   return render(request, 'ManageRewards/rewards.html')
+
+###Display Baggage Page
+def viewBaggage(request):
+ 
+   return render(request, 'Baggage/baggage.html')
+
+###Display Economy Baggage Page
+def viewEconomyBaggage(request):
+ 
+   return render(request, 'Baggage/economy.html')
+
+###Display Business Class Baggage Page
+def viewBusinessBaggage(request):
+ 
+   return render(request, 'Baggage/business.html')
+
+###Display First Class Baggage Page
+def viewFirstBaggage(request):
+ 
+   return render(request, 'Baggage/first.html')
+
+###Display Travel Page
+def viewTravelRequirmentTool(request):
+ 
+   return render(request, 'TravelRequirments/travelRequirmentTool.html')
+
+###Display Travel Result Page
+def viewTravelRequirmentResult(request):
+ 
+   return render(request, 'TravelRequirments/travelRequirmentsResult.html')
+
+###Display CheckIn
+def viewCheckIn(request):
+ 
+   return render(request, 'ManageBooking/CheckIn/CheckIn.html')
+
+###Display Boarding Pass
+def viewboardinPass(request):
+ 
+   return render(request, 'ManageBooking/CheckIn/boardingpass.html')
+
+
+
+
+
 ###Display Modify Departure Flights
 def modifyDepartureFlight(request):
  
@@ -703,3 +752,146 @@ def submitModifydepartureform(request):
      except:
       pass
 
+
+def submittravelform(request):
+  try:
+    
+    if request.method=="POST":
+
+      passport = str(request.POST.get('passport'))
+      travellingTo = str(request.POST.get('travellingTo')) 
+
+      
+      #Storing this data in session for further use
+      request.session['passport']=passport
+      request.session['travellingTo']=travellingTo
+      
+
+      data = {
+
+            'passport':passport,
+            'travellingTo':travellingTo,
+
+      }
+
+      print(data)
+      
+      #Redirected if trip selected is ONEWAY
+     # if passport == "Canada":
+
+      url = "/api/travelRequirmentResult/?passport={}&travellingTo={}".format(passport, travellingTo)
+      return redirect(url)   
+       
+      #Redirected if trip selected is ROUNDTRIP
+  #    else:
+
+ #      url = "/api/departureFlights/?trip={}&from={}&to={}&departure={}&return={}".format(tripD,fromD,toD,departD,returnD)
+ #      return redirect(url)
+      
+  #  return tripD
+  
+  except:
+   pass
+  
+
+
+
+#----------------------------------------------------------#
+###Once the submit button is clicked on CheckIn page
+@csrf_exempt 
+def submitcheckInPage(request):
+
+  if request.method=="POST":
+
+   #Retrieving all info from CheckIn form
+   passportNumber = str(request.POST.get('passportNumber')) 
+   fNamePassport = str(request.POST.get('firstName'))
+   lNamePassport = str(request.POST.get('lastName')) 
+   expiryDate = str(request.POST.get('passportExpiry')) 
+
+   carryOn = str(request.POST.get('carryOn')) 
+   checked = str(request.POST.get('checked')) 
+   special = str(request.POST.get('special')) 
+
+   seat = str(request.POST.get('seatSelection')) 
+   ##------##
+   # POST Request to create passportAPI
+   url = "http://localhost:8000/api/passports/"
+   header = {
+    "Content-Type":"application/json"
+    }
+   payload ={
+   "passportNumber": passportNumber,
+	"firstNameOnPassport": fNamePassport,  
+	"lastNameOnPassport": lNamePassport,
+	"expiryDate": expiryDate
+   }
+   result = requests.post(url,  data=json.dumps(payload), headers=header)
+   result_json = result.json()
+
+   #Retrieving passport ID from response
+   passportId= result_json["id"]
+   print(passportId)
+
+   # Storing passport ID in session variable
+   request.session['passport_id'] = passportId
+
+   ##------##
+    # POST Request to create BaggageAPI
+   url = "http://localhost:8000/api/baggages/"
+   header = {
+    "Content-Type":"application/json"
+    }
+   payload ={
+   "carryOnQuantity": carryOn,
+	"checkedInQuantity": checked,  
+	"specialBaggage": special
+   }
+   result = requests.post(url,  data=json.dumps(payload), headers=header)
+   result_json = result.json()
+
+   #Retrieving baggage ID from response
+   baggageId= result_json["id"]
+   print(baggageId)
+
+   # Storing baggage ID in session variable
+   request.session['baggage_id'] = baggageId
+
+   #Creating Random Booking Refernce Number
+   crn= ''.join(random.choices(string.ascii_letters + string.digits, k=10))
+   checkInReferenceNumber = crn
+   bookingId =10
+   request.session['seat_selection'] = seat
+
+   ##------##
+   ##------##
+    # POST Request to create checkInAPI
+   url = "http://localhost:8000/api/checkins/"
+   header = {
+    "Content-Type":"application/json"
+    }
+   payload ={
+   "checkInNumber" : checkInReferenceNumber,
+   "passport_id": passportId,
+   "baggage_id": baggageId,  
+   "booking_id": bookingId, 
+	"seatSelection": seat
+   }
+
+   result = requests.post(url,  data=json.dumps(payload), headers=header)
+   result_json = result.json()
+
+   #Retrieving baggage ID from response
+   #checkInId= result_json["id"]
+   print(checkInReferenceNumber)
+
+   # Storing baggage ID in session variable
+   #request.session['baggage_id'] = baggageId
+
+   ##------##
+   
+   #Retrieving Trip Info TO be sent in URL
+
+   url = "/api/boardingPass/?checkInNumber={}".format(checkInReferenceNumber)
+
+   return redirect(url)

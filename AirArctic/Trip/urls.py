@@ -37,4 +37,17 @@ urlpatterns = [
     path('bookingView/',views.viewBookings, name='bookingView'),
     path('bookingUpdate/<int:pk>/', BookingUpdateView.as_view(), name='booking-update'),
 
+    # Passport Details endpoints
+    path('passports/',views.retrieveAllPassports),
+    path('passport/<int:id>',views.retrieveSinglePassport),
+
+    # Baggage Details endpoints
+    path('baggages/',views.retrieveAllBaggages),
+    path('baggage/<int:id>',views.retrieveSingleBaggage),
+
+    # CheckIn Details endpoints
+    path('checkins/',views.retrieveAllCheckIns),
+    path('checkin/<int:id>',views.retrieveSingleCheckIn),
+
+    
 ]
